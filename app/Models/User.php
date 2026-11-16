@@ -54,6 +54,22 @@ class User extends Authenticatable
         return $this->hasMany(Appointment::class, 'patient_id');
     }
 
+    /**
+     * Records written about this user as a patient.
+     */
+    public function medicalRecords(): HasMany
+    {
+        return $this->hasMany(MedicalRecord::class, 'patient_id');
+    }
+
+    /**
+     * Records written by this user as a doctor.
+     */
+    public function writtenRecords(): HasMany
+    {
+        return $this->hasMany(MedicalRecord::class, 'doctor_id');
+    }
+
     public function hasRole(Role ...$roles): bool
     {
         return in_array($this->role, $roles, true);
