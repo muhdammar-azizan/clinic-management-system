@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Role;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -41,6 +42,11 @@ class User extends Authenticatable
     public function doctorProfile(): HasOne
     {
         return $this->hasOne(DoctorProfile::class);
+    }
+
+    public function rosterSlots(): HasMany
+    {
+        return $this->hasMany(RosterSlot::class, 'doctor_id');
     }
 
     public function hasRole(Role ...$roles): bool
