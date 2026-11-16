@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Role;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -22,6 +23,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'date_of_birth',
+        'gender',
+        'address',
     ];
 
     /**
@@ -32,6 +37,11 @@ class User extends Authenticatable
     protected $attributes = [
         'role' => 'patient',
     ];
+
+    public function doctorProfile(): HasOne
+    {
+        return $this->hasOne(DoctorProfile::class);
+    }
 
     public function hasRole(Role ...$roles): bool
     {
@@ -74,6 +84,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'role' => Role::class,
+            'date_of_birth' => 'date',
         ];
     }
 }
