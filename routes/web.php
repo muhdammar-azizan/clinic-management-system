@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', Admin\DashboardController::class)->name('dashboard');
     Route::get('appointments', [Admin\AppointmentController::class, 'index'])->name('appointments.index');
+    Route::get('records', [Admin\MedicalRecordController::class, 'index'])->name('records.index');
     Route::resource('doctors', Admin\DoctorController::class)->except('show');
     Route::get('rosters/calendar', [Admin\RosterSlotController::class, 'calendar'])->name('rosters.calendar');
     Route::resource('rosters', Admin\RosterSlotController::class)->except('show')->parameters(['rosters' => 'slot']);
@@ -52,6 +53,9 @@ Route::middleware(['auth', 'role:patient'])->prefix('patient')->name('patient.')
     Route::get('/dashboard', Patient\DashboardController::class)->name('dashboard');
     Route::get('/book', [Patient\BookingController::class, 'create'])->name('booking.create');
     Route::post('/book', [Patient\BookingController::class, 'store'])->name('booking.store');
+    Route::get('/records', [Patient\MedicalRecordController::class, 'index'])->name('records.index');
+    Route::get('/records/attachments/{attachment}', [Patient\MedicalRecordController::class, 'download'])->name('records.attachments.show');
+    Route::get('/records/{record}', [Patient\MedicalRecordController::class, 'show'])->name('records.show');
     Route::get('/appointments', [Patient\AppointmentController::class, 'index'])->name('appointments.index');
     Route::patch('/appointments/{appointment}/cancel', [Patient\AppointmentController::class, 'cancel'])->name('appointments.cancel');
 });

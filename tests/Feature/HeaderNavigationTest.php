@@ -29,8 +29,23 @@ class HeaderNavigationTest extends TestCase
     {
         $admin = User::factory()->create(['role' => Role::Admin]);
 
+        config(['navigation.admin' => [
+            ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'active' => 'admin.dashboard'],
+            ['label' => 'Future Page', 'route' => 'admin.future.index', 'active' => 'admin.future.*'],
+        ]]);
+
         $this->actingAs($admin)
             ->get(route('admin.dashboard'))
-            ->assertDontSee('Medical Records');
+            ->assertSee('Dashboard')
+            ->assertDontSee('Future Page');
+    }
+
+    public function test_every_menu_item_points_to_a_real_route(): void
+    {
+        foreach (config('navigation') as $role => $items) {
+            foreach ($items as $item) {
+                $this->assertTrue(\Illuminate\Support\Facades\Route::has($item['route']), "Missing route {$item['route']} for {$role}");
+            }
+        }
     }
 }

@@ -24,7 +24,6 @@ return [
 
     'doctor' => [
         ['label' => 'Dashboard', 'route' => 'doctor.dashboard', 'active' => 'doctor.dashboard'],
-        ['label' => 'My Patients', 'route' => 'doctor.patients.index', 'active' => 'doctor.patients.*'],
         ['label' => 'Appointments', 'route' => 'doctor.appointments.index', 'active' => 'doctor.appointments.*'],
         ['label' => 'Schedule', 'route' => 'doctor.schedule.index', 'active' => 'doctor.schedule.*'],
         ['label' => 'Medical Records', 'route' => 'doctor.records.index', 'active' => 'doctor.records.*'],
