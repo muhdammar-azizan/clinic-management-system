@@ -103,7 +103,7 @@ class BookingTest extends TestCase
             'service_id' => $service->id,
             'roster_slot_id' => $slot->id,
             'reason' => 'Persistent cough',
-        ])->assertRedirect('/patient/dashboard')->assertSessionHas('status');
+        ])->assertRedirect('/patient/appointments')->assertSessionHas('status');
 
         $appointment = Appointment::first();
         $this->assertSame($patient->id, $appointment->patient_id);

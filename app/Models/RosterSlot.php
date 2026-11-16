@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SlotStatus;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -66,6 +67,14 @@ class RosterSlot extends Model
     public function hasActiveBooking(): bool
     {
         return $this->activeAppointment()->exists();
+    }
+
+    /**
+     * Date and time when the slot starts.
+     */
+    public function startsAt(): Carbon
+    {
+        return $this->slot_date->copy()->setTimeFromTimeString((string) $this->start_time);
     }
 
     public function isAvailable(): bool

@@ -98,6 +98,6 @@ class BookingController extends Controller
                 ->with('error', $error);
         }
 
-        return to_route('patient.dashboard')->with('status', 'Your appointment has been booked.');
+        return to_route('patient.appointments.index')->with('status', 'Your appointment has been booked.');
     }
 }

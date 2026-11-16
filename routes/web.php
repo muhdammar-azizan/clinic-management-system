@@ -48,6 +48,8 @@ Route::middleware(['auth', 'role:patient'])->prefix('patient')->name('patient.')
     Route::get('/dashboard', Patient\DashboardController::class)->name('dashboard');
     Route::get('/book', [Patient\BookingController::class, 'create'])->name('booking.create');
     Route::post('/book', [Patient\BookingController::class, 'store'])->name('booking.store');
+    Route::get('/appointments', [Patient\AppointmentController::class, 'index'])->name('appointments.index');
+    Route::patch('/appointments/{appointment}/cancel', [Patient\AppointmentController::class, 'cancel'])->name('appointments.cancel');
 });
 
 require __DIR__.'/auth.php';

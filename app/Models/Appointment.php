@@ -70,6 +70,14 @@ class Appointment extends Model
         return $this->status === AppointmentStatus::Booked;
     }
 
+    /**
+     * A booked appointment can be cancelled until its slot starts.
+     */
+    public function canBeCancelled(): bool
+    {
+        return $this->isBooked() && $this->slot->startsAt()->isFuture();
+    }
+
     public function scopeBooked(Builder $query): Builder
     {
         return $query->where('status', AppointmentStatus::Booked);
