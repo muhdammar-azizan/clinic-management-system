@@ -30,7 +30,7 @@ class RosterSlotSchemaTest extends TestCase
         $this->expectException(QueryException::class);
         RosterSlot::factory()->create([
             'doctor_id' => $slot->doctor_id,
-            'slot_date' => $slot->slot_date,
+            'slot_date' => $slot->slot_date->toDateString(),
             'start_time' => $slot->start_time,
         ]);
     }
@@ -38,7 +38,7 @@ class RosterSlotSchemaTest extends TestCase
     public function test_different_doctors_can_share_the_same_time(): void
     {
         $slot = RosterSlot::factory()->create();
-        RosterSlot::factory()->create(['slot_date' => $slot->slot_date, 'start_time' => $slot->start_time]);
+        RosterSlot::factory()->create(['slot_date' => $slot->slot_date->toDateString(), 'start_time' => $slot->start_time]);
 
         $this->assertSame(2, RosterSlot::count());
     }

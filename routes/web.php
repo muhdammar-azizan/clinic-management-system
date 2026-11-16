@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', Admin\DashboardController::class)->name('dashboard');
     Route::resource('doctors', Admin\DoctorController::class)->except('show');
+    Route::resource('rosters', Admin\RosterSlotController::class)->except('show')->parameters(['rosters' => 'slot']);
     Route::resource('patients', Admin\PatientController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
 });
 

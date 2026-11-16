@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class RosterSlot extends Model
 {
@@ -22,7 +24,7 @@ class RosterSlot extends Model
     protected function casts(): array
     {
         return [
-            'slot_date' => 'date',
+            'slot_date' => 'date:Y-m-d',
             'status' => SlotStatus::class,
         ];
     }
@@ -46,6 +48,24 @@ class RosterSlot extends Model
     protected function startTimeLabel(): Attribute
     {
         return Attribute::get(fn () => substr((string) $this->start_time, 0, 5));
+    }
+
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    /**
+     * The one booked appointment that currently holds this slot, if any.
+     */
+    public function activeAppointment(): HasOne
+    {
+        return $this->hasOne(Appointment::class, 'active_slot_id');
+    }
+
+    public function hasActiveBooking(): bool
+    {
+        return $this->activeAppointment()->exists();
     }
 
     public function isAvailable(): bool

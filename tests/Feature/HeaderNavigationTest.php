@@ -31,6 +31,6 @@ class HeaderNavigationTest extends TestCase
 
         $this->actingAs($admin)
             ->get(route('admin.dashboard'))
-            ->assertDontSee('Doctor Rosters');
+            ->assertDontSee('Medical Records');
     }
 }
