@@ -2,6 +2,7 @@
     <div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
         <x-page-header title="Doctor Roster" subtitle="Create and manage appointment slots for each doctor.">
             <x-slot name="actions">
+                @include('admin.rosters._tabs')
                 <x-button :href="route('admin.rosters.create')">Add Slot</x-button>
             </x-slot>
         </x-page-header>

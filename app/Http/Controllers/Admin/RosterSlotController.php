@@ -7,7 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RosterSlotRequest;
 use App\Models\RosterSlot;
 use App\Models\User;
+use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class RosterSlotController extends Controller
@@ -23,6 +26,39 @@ class RosterSlotController extends Controller
             ->withQueryString();
 
         return view('admin.rosters.index', ['slots' => $slots]);
+    }
+
+    /**
+     * Weekly calendar (Monday to Sunday). The week comes from ?week=YYYY-MM-DD, any day in that week.
+     */
+    public function calendar(Request $request): View
+    {
+        try {
+            $anchor = $request->filled('week') ? Carbon::createFromFormat('Y-m-d', $request->string('week')->toString())->startOfDay() : today();
+        } catch (InvalidFormatException) {
+            $anchor = today();
+        }
+
+        $weekStart = $anchor->copy()->startOfWeek(Carbon::MONDAY);
+        $weekEnd = $weekStart->copy()->addDays(6);
+        $doctorId = $request->integer('doctor') ?: null;
+
+        $slotsByDay = RosterSlot::query()
+            ->with('doctor')
+            ->withExists('activeAppointment')
+            ->whereBetween('slot_date', [$weekStart->toDateString(), $weekEnd->toDateString()])
+            ->when($doctorId, fn ($query) => $query->where('doctor_id', $doctorId))
+            ->orderBy('start_time')
+            ->get()
+            ->groupBy(fn (RosterSlot $slot) => $slot->slot_date->toDateString());
+
+        return view('admin.rosters.calendar', [
+            'weekStart' => $weekStart,
+            'days' => collect(range(0, 6))->map(fn ($i) => $weekStart->copy()->addDays($i)),
+            'slotsByDay' => $slotsByDay,
+            'doctors' => $this->doctors(),
+            'doctorId' => $doctorId,
+        ]);
     }
 
     public function create(): View
