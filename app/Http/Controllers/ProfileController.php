@@ -42,6 +42,9 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // Doctor accounts are managed by the admin, and the admin account must stay.
+        abort_unless($request->user()->isPatient(), 403);
+
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);

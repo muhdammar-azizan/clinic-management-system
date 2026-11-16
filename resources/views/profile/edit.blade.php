@@ -4,6 +4,8 @@
 
         <x-card>@include('profile.partials.update-profile-information-form')</x-card>
         <x-card>@include('profile.partials.update-password-form')</x-card>
-        <x-card>@include('profile.partials.delete-user-form')</x-card>
+        @if ($user->isPatient())
+            <x-card>@include('profile.partials.delete-user-form')</x-card>
+        @endif
     </div>
 </x-app-layout>
