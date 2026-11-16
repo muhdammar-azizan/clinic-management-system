@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Patient;
 
-use App\Enums\AppointmentStatus;
-use App\Enums\SlotStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Services\AppointmentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class AppointmentController extends Controller
@@ -29,23 +27,11 @@ class AppointmentController extends Controller
         ]);
     }
 
-    public function cancel(Request $request, Appointment $appointment): RedirectResponse
+    public function cancel(Request $request, Appointment $appointment, AppointmentService $appointments): RedirectResponse
     {
         abort_unless($appointment->patient_id === $request->user()->id, 403);
 
-        $error = DB::transaction(function () use ($appointment) {
-            $appointment = Appointment::with('slot')->lockForUpdate()->findOrFail($appointment->id);
-
-            if (! $appointment->canBeCancelled()) {
-                return 'Only upcoming booked appointments can be cancelled.';
-            }
-
-            $appointment->update(['status' => AppointmentStatus::Cancelled]);
-            // Give the slot back so another patient can book it.
-            $appointment->slot->update(['status' => SlotStatus::Available]);
-
-            return null;
-        });
+        $error = $appointments->cancel($appointment, onlyBeforeStart: true);
 
         return to_route('patient.appointments.index')
             ->with($error ? 'error' : 'status', $error ?? 'Your appointment has been cancelled.');

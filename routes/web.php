@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
 // Admin area
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', Admin\DashboardController::class)->name('dashboard');
+    Route::get('appointments', [Admin\AppointmentController::class, 'index'])->name('appointments.index');
     Route::resource('doctors', Admin\DoctorController::class)->except('show');
     Route::get('rosters/calendar', [Admin\RosterSlotController::class, 'calendar'])->name('rosters.calendar');
     Route::resource('rosters', Admin\RosterSlotController::class)->except('show')->parameters(['rosters' => 'slot']);
@@ -41,6 +42,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 Route::middleware(['auth', 'role:doctor'])->prefix('doctor')->name('doctor.')->group(function () {
     Route::get('/dashboard', Doctor\DashboardController::class)->name('dashboard');
     Route::get('/schedule', Doctor\ScheduleController::class)->name('schedule.index');
+    Route::resource('appointments', Doctor\AppointmentController::class)->only(['index', 'edit', 'update', 'destroy']);
 });
 
 // Patient area

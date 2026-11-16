@@ -78,6 +78,17 @@ class Appointment extends Model
         return $this->isBooked() && $this->slot->startsAt()->isFuture();
     }
 
+    /**
+     * Sort by the slot's date and time. Joins roster_slots, so qualify column names when filtering.
+     */
+    public function scopeOrderedBySlot(Builder $query, string $direction = 'desc'): Builder
+    {
+        return $query->select('appointments.*')
+            ->join('roster_slots', 'roster_slots.id', '=', 'appointments.roster_slot_id')
+            ->orderBy('roster_slots.slot_date', $direction)
+            ->orderBy('roster_slots.start_time', $direction);
+    }
+
     public function scopeBooked(Builder $query): Builder
     {
         return $query->where('status', AppointmentStatus::Booked);
