@@ -40,6 +40,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 // Doctor area
 Route::middleware(['auth', 'role:doctor'])->prefix('doctor')->name('doctor.')->group(function () {
     Route::get('/dashboard', Doctor\DashboardController::class)->name('dashboard');
+    Route::get('/schedule', Doctor\ScheduleController::class)->name('schedule.index');
 });
 
 // Patient area

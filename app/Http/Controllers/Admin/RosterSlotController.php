@@ -9,8 +9,7 @@ use App\Http\Requests\Admin\RosterSlotRequest;
 use App\Models\RosterSlot;
 use App\Models\Service;
 use App\Models\User;
-use Carbon\Carbon;
-use Carbon\Exceptions\InvalidFormatException;
+use App\Support\Week;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -74,13 +73,7 @@ class RosterSlotController extends Controller
      */
     public function calendar(Request $request): View
     {
-        try {
-            $anchor = $request->filled('week') ? Carbon::createFromFormat('Y-m-d', $request->string('week')->toString())->startOfDay() : today();
-        } catch (InvalidFormatException) {
-            $anchor = today();
-        }
-
-        $weekStart = $anchor->copy()->startOfWeek(Carbon::MONDAY);
+        $weekStart = Week::start($request->query('week'));
         $weekEnd = $weekStart->copy()->addDays(6);
         $doctorId = $request->integer('doctor') ?: null;
 
