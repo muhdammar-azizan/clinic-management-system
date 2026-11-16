@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Appointment extends Model
 {
@@ -68,6 +69,23 @@ class Appointment extends Model
     public function isBooked(): bool
     {
         return $this->status === AppointmentStatus::Booked;
+    }
+
+    public function medicalRecord(): HasOne
+    {
+        return $this->hasOne(MedicalRecord::class);
+    }
+
+    /**
+     * A record can be written once the visit has happened (completed, or booked and already started)
+     * and only one record is allowed per appointment.
+     */
+    public function canHaveMedicalRecord(): bool
+    {
+        $visitHappened = $this->status === AppointmentStatus::Completed
+            || ($this->isBooked() && ! $this->slot->startsAt()->isFuture());
+
+        return $visitHappened && ! $this->medicalRecord()->exists();
     }
 
     /**

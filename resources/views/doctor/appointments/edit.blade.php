@@ -21,6 +21,17 @@
             </dl>
         </x-card>
 
+        @if ($appointment->canHaveMedicalRecord())
+            <x-card title="Medical record">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <p class="text-sm text-muted">The visit has started. Write the medical record for this patient.</p>
+                    <x-button :href="route('doctor.records.create', ['appointment' => $appointment->id])">Write medical record</x-button>
+                </div>
+            </x-card>
+        @elseif ($appointment->medicalRecord()->exists())
+            <x-alert variant="success">A medical record has been written for this appointment.</x-alert>
+        @endif
+
         @if ($appointment->isBooked())
             <form method="POST" action="{{ route('doctor.appointments.update', $appointment) }}">
                 @csrf
