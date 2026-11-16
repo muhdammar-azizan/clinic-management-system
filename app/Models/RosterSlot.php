@@ -78,6 +78,21 @@ class RosterSlot extends Model
         return $query->where('status', SlotStatus::Available);
     }
 
+    /**
+     * Slots a patient can still book: available, no active booking, and not already in the past.
+     */
+    public function scopeBookable(Builder $query): Builder
+    {
+        return $query->available()
+            ->whereDoesntHave('activeAppointment')
+            ->where(function (Builder $q) {
+                $q->whereDate('slot_date', '>', today())
+                    ->orWhere(fn (Builder $today) => $today
+                        ->whereDate('slot_date', today())
+                        ->where('start_time', '>', now()->format('H:i')));
+            });
+    }
+
     public function scopeUpcoming(Builder $query): Builder
     {
         return $query->whereDate('slot_date', '>=', today());

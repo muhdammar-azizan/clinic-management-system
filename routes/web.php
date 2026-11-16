@@ -46,6 +46,8 @@ Route::middleware(['auth', 'role:doctor'])->prefix('doctor')->name('doctor.')->g
 // Patient area
 Route::middleware(['auth', 'role:patient'])->prefix('patient')->name('patient.')->group(function () {
     Route::get('/dashboard', Patient\DashboardController::class)->name('dashboard');
+    Route::get('/book', [Patient\BookingController::class, 'create'])->name('booking.create');
+    Route::post('/book', [Patient\BookingController::class, 'store'])->name('booking.store');
 });
 
 require __DIR__.'/auth.php';
