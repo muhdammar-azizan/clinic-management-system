@@ -10,6 +10,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Design preview page, available in local development only.
+Route::get('/style-guide', function () {
+    abort_unless(app()->environment(['local', 'testing']), 404);
+
+    return view('style-guide');
+})->name('style-guide');
+
 // Send each user to the dashboard that matches their role.
 Route::get('/dashboard', function () {
     return redirect()->route(auth()->user()->role->dashboardRoute());
