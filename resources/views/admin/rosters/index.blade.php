@@ -14,8 +14,60 @@
             <x-alert variant="danger">{{ session('error') }}</x-alert>
         @endif
 
+        <x-card>
+            <form method="GET" class="space-y-4">
+                <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    <x-field label="Search" name="search" class="sm:col-span-2 lg:col-span-1">
+                        <x-text-input name="search" type="search" class="block w-full" placeholder="Slot ID, doctor or notes" :value="request('search')" />
+                    </x-field>
+
+                    <x-field label="Doctor" name="doctor">
+                        <x-select name="doctor" class="block w-full">
+                            <option value="">All doctors</option>
+                            @foreach ($doctors as $doctor)
+                                <option value="{{ $doctor->id }}" @selected(request('doctor') == $doctor->id)>{{ $doctor->name }}</option>
+                            @endforeach
+                        </x-select>
+                    </x-field>
+
+                    <x-field label="Service" name="service">
+                        <x-select name="service" class="block w-full">
+                            <option value="">All services</option>
+                            @foreach ($services as $service)
+                                <option value="{{ $service->id }}" @selected(request('service') == $service->id)>{{ $service->name }}</option>
+                            @endforeach
+                        </x-select>
+                    </x-field>
+
+                    <x-field label="Status" name="status">
+                        <x-select name="status" class="block w-full">
+                            <option value="">All statuses</option>
+                            @foreach (\App\Enums\SlotStatus::cases() as $status)
+                                <option value="{{ $status->value }}" @selected(request('status') === $status->value)>{{ $status->label() }}</option>
+                            @endforeach
+                        </x-select>
+                    </x-field>
+
+                    <x-field label="From date" name="from">
+                        <x-text-input name="from" type="date" class="block w-full" :value="request('from')" />
+                    </x-field>
+
+                    <x-field label="To date" name="to">
+                        <x-text-input name="to" type="date" class="block w-full" :value="request('to')" />
+                    </x-field>
+                </div>
+
+                <div class="flex gap-2">
+                    <x-button type="submit">Apply filters</x-button>
+                    @if ($filtered)
+                        <x-button :href="route('admin.rosters.index')" variant="ghost">Clear</x-button>
+                    @endif
+                </div>
+            </form>
+        </x-card>
+
         <x-card :padding="false">
-            <x-table empty="No slots yet. Add the first slot to start taking bookings.">
+            <x-table :empty="$filtered ? 'No slots match your filters.' : 'No slots yet. Add the first slot to start taking bookings.'">
                 @if ($slots->isNotEmpty())
                     <x-slot name="head">
                         <tr>

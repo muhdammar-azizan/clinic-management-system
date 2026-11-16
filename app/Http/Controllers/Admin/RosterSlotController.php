@@ -3,29 +3,70 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\Role;
+use App\Enums\SlotStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RosterSlotRequest;
 use App\Models\RosterSlot;
+use App\Models\Service;
 use App\Models\User;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class RosterSlotController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $filters = $request->validate([
+            'search' => ['nullable', 'string', 'max:100'],
+            'doctor' => ['nullable', 'integer'],
+            'service' => ['nullable', 'integer'],
+            'status' => ['nullable', Rule::enum(SlotStatus::class)],
+            'from' => ['nullable', 'date'],
+            'to' => ['nullable', 'date', 'after_or_equal:from'],
+        ]);
+
         $slots = RosterSlot::query()
             ->with('doctor.doctorProfile.service')
             ->withExists('activeAppointment')
+            ->when($filters['search'] ?? null, fn ($query, $search) => $this->applySearch($query, trim($search)))
+            ->when($filters['doctor'] ?? null, fn ($query, $doctor) => $query->where('doctor_id', $doctor))
+            ->when($filters['service'] ?? null, function ($query, $service) {
+                $query->whereHas('doctor.doctorProfile', fn ($q) => $q->where('service_id', $service));
+            })
+            ->when($filters['status'] ?? null, fn ($query, $status) => $query->where('status', $status))
+            ->when($filters['from'] ?? null, fn ($query, $from) => $query->whereDate('slot_date', '>=', $from))
+            ->when($filters['to'] ?? null, fn ($query, $to) => $query->whereDate('slot_date', '<=', $to))
             ->orderByDesc('slot_date')
             ->orderBy('start_time')
             ->paginate(15)
             ->withQueryString();
 
-        return view('admin.rosters.index', ['slots' => $slots]);
+        return view('admin.rosters.index', [
+            'slots' => $slots,
+            'doctors' => $this->doctors(),
+            'services' => Service::orderBy('name')->get(),
+            'filtered' => collect($filters)->filter()->isNotEmpty(),
+        ]);
+    }
+
+    /**
+     * Match doctor name, notes or the slot ID (accepts "SLT-00012", "slt12" or just "12").
+     */
+    private function applySearch(Builder $query, string $search): Builder
+    {
+        return $query->where(function (Builder $q) use ($search) {
+            $q->where('notes', 'like', "%{$search}%")
+                ->orWhereHas('doctor', fn ($d) => $d->where('name', 'like', "%{$search}%"));
+
+            if (preg_match('/^(?:slt-?)?0*(\d+)$/i', $search, $match)) {
+                $q->orWhere('id', (int) $match[1]);
+            }
+        });
     }
 
     /**
