@@ -43,7 +43,8 @@ Route::middleware(['auth', 'role:doctor'])->prefix('doctor')->name('doctor.')->g
     Route::get('/dashboard', Doctor\DashboardController::class)->name('dashboard');
     Route::get('/schedule', Doctor\ScheduleController::class)->name('schedule.index');
     Route::resource('appointments', Doctor\AppointmentController::class)->only(['index', 'edit', 'update', 'destroy']);
-    Route::resource('records', Doctor\MedicalRecordController::class)->only(['create', 'store']);
+    Route::get('records/attachments/{attachment}', Doctor\RecordAttachmentController::class)->name('records.attachments.show');
+    Route::resource('records', Doctor\MedicalRecordController::class);
 });
 
 // Patient area

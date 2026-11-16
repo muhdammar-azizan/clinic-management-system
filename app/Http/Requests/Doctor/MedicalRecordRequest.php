@@ -43,6 +43,10 @@ class MedicalRecordRequest extends FormRequest
             'prescription_files.*' => $file,
             'attachments' => ['nullable', 'array', 'max:'.self::MAX_FILES],
             'attachments.*' => $file,
+
+            // Editing only: ids of existing attachments to remove.
+            'remove_attachments' => ['nullable', 'array'],
+            'remove_attachments.*' => ['integer'],
         ];
     }
 
