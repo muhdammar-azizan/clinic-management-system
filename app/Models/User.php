@@ -49,6 +49,11 @@ class User extends Authenticatable
         return $this->hasMany(RosterSlot::class, 'doctor_id');
     }
 
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class, 'patient_id');
+    }
+
     public function hasRole(Role ...$roles): bool
     {
         return in_array($this->role, $roles, true);
