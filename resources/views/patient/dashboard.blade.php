@@ -1,17 +1,9 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Patient Dashboard
-        </h2>
-    </x-slot>
+    <div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+        <x-page-header title="Patient Dashboard" subtitle="Manage your visits and records." />
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    Welcome, {{ auth()->user()->name }}.
-                </div>
-            </div>
-        </div>
+        <x-card title="Welcome">
+            <p class="text-sm text-ink">Welcome, {{ auth()->user()->name }}.</p>
+        </x-card>
     </div>
 </x-app-layout>
