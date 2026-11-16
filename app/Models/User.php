@@ -24,6 +24,15 @@ class User extends Authenticatable
         'password',
     ];
 
+    /**
+     * Default attribute values. New users are patients unless set otherwise.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'role' => 'patient',
+    ];
+
     public function hasRole(Role ...$roles): bool
     {
         return in_array($this->role, $roles, true);
