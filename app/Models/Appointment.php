@@ -107,6 +107,44 @@ class Appointment extends Model
             ->orderBy('roster_slots.start_time', $direction);
     }
 
+    /**
+     * Booked appointments whose slot has not started yet.
+     */
+    public function scopeUpcoming(Builder $query): Builder
+    {
+        return $query->where('appointments.status', AppointmentStatus::Booked)
+            ->whereHas('slot', fn (Builder $slot) => $slot->where(function (Builder $q) {
+                $q->whereDate('slot_date', '>', today())
+                    ->orWhere(fn (Builder $day) => $day->whereDate('slot_date', today())->where('start_time', '>', now()->format('H:i')));
+            }));
+    }
+
+    /**
+     * Appointments on the given day that are still active (booked or completed).
+     */
+    public function scopeOnDay(Builder $query, $date): Builder
+    {
+        return $query->whereIn('appointments.status', [AppointmentStatus::Booked, AppointmentStatus::Completed])
+            ->whereHas('slot', fn (Builder $slot) => $slot->whereDate('slot_date', $date));
+    }
+
+    /**
+     * Visits that have happened but have no medical record yet. Matches canHaveMedicalRecord().
+     */
+    public function scopeAwaitingRecord(Builder $query): Builder
+    {
+        return $query->whereDoesntHave('medicalRecord')
+            ->where(function (Builder $q) {
+                $q->where('appointments.status', AppointmentStatus::Completed)
+                    ->orWhere(fn (Builder $booked) => $booked
+                        ->where('appointments.status', AppointmentStatus::Booked)
+                        ->whereHas('slot', fn (Builder $slot) => $slot->where(function (Builder $started) {
+                            $started->whereDate('slot_date', '<', today())
+                                ->orWhere(fn (Builder $day) => $day->whereDate('slot_date', today())->where('start_time', '<=', now()->format('H:i')));
+                        })));
+            });
+    }
+
     public function scopeBooked(Builder $query): Builder
     {
         return $query->where('status', AppointmentStatus::Booked);
