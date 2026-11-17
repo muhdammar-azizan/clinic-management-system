@@ -15,7 +15,7 @@ class RecordAttachmentController extends Controller
      */
     public function __invoke(Request $request, MedicalRecordAttachment $attachment): StreamedResponse
     {
-        abort_unless($attachment->record->doctor_id === $request->user()->id, 403);
+        $this->authorize('download', $attachment);
         abort_unless(Storage::exists($attachment->path), 404);
 
         return Storage::download($attachment->path, $attachment->original_name);

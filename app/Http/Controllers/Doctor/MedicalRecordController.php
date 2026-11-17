@@ -107,7 +107,7 @@ class MedicalRecordController extends Controller
 
     public function show(Request $request, MedicalRecord $record): View
     {
-        $this->authorizeOwnership($request, $record);
+        $this->authorize('manage', $record);
 
         return view('doctor.records.show', [
             'record' => $record->load('patient', 'attachments', 'appointment'),
@@ -116,7 +116,7 @@ class MedicalRecordController extends Controller
 
     public function edit(Request $request, MedicalRecord $record): View
     {
-        $this->authorizeOwnership($request, $record);
+        $this->authorize('manage', $record);
 
         $record->load('patient', 'attachments', 'appointment.slot', 'appointment.service');
 
@@ -128,7 +128,7 @@ class MedicalRecordController extends Controller
 
     public function update(MedicalRecordRequest $request, MedicalRecord $record): RedirectResponse
     {
-        $this->authorizeOwnership($request, $record);
+        $this->authorize('manage', $record);
 
         $removeIds = collect($request->input('remove_attachments', []))->map(fn ($id) => (int) $id)->all();
 
@@ -147,7 +147,7 @@ class MedicalRecordController extends Controller
 
     public function destroy(Request $request, MedicalRecord $record): RedirectResponse
     {
-        $this->authorizeOwnership($request, $record);
+        $this->authorize('manage', $record);
 
         // Soft delete: the row and its files stay in storage and can be restored by a developer.
         $record->delete();
@@ -194,17 +194,9 @@ class MedicalRecordController extends Controller
     {
         $appointment = Appointment::with('patient', 'slot', 'service')->findOrFail($id);
 
-        abort_unless($appointment->slot->doctor_id === $request->user()->id, 403);
+        $this->authorize('writeRecord', $appointment);
 
         return $appointment;
-    }
-
-    /**
-     * A doctor can only work with the records they wrote.
-     */
-    private function authorizeOwnership(Request $request, MedicalRecord $record): void
-    {
-        abort_unless($record->doctor_id === $request->user()->id, 403);
     }
 
     private function notAllowed(): RedirectResponse

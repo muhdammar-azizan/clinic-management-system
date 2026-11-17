@@ -41,7 +41,7 @@ class AppointmentController extends Controller
 
     public function edit(Request $request, Appointment $appointment): View
     {
-        $this->authorizeOwnership($request, $appointment);
+        $this->authorize('manage', $appointment);
 
         return view('doctor.appointments.edit', [
             'appointment' => $appointment->load('patient', 'slot', 'service'),
@@ -50,7 +50,7 @@ class AppointmentController extends Controller
 
     public function update(Request $request, Appointment $appointment, AppointmentService $appointments): RedirectResponse
     {
-        $this->authorizeOwnership($request, $appointment);
+        $this->authorize('manage', $appointment);
 
         $data = $request->validate([
             'status' => ['required', Rule::in([AppointmentStatus::Completed->value, AppointmentStatus::Cancelled->value])],
@@ -69,18 +69,10 @@ class AppointmentController extends Controller
 
     public function destroy(Request $request, Appointment $appointment, AppointmentService $appointments): RedirectResponse
     {
-        $this->authorizeOwnership($request, $appointment);
+        $this->authorize('manage', $appointment);
 
         $appointments->delete($appointment);
 
         return to_route('doctor.appointments.index')->with('status', 'Appointment deleted.');
-    }
-
-    /**
-     * A doctor can only work with appointments booked on their own slots.
-     */
-    private function authorizeOwnership(Request $request, Appointment $appointment): void
-    {
-        abort_unless($appointment->slot->doctor_id === $request->user()->id, 403);
     }
 }

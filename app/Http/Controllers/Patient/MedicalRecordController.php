@@ -29,7 +29,7 @@ class MedicalRecordController extends Controller
 
     public function show(Request $request, MedicalRecord $record): View
     {
-        $this->authorizeOwnership($request, $record);
+        $this->authorize('view', $record);
 
         $record->load('doctor.doctorProfile.service');
 
@@ -42,15 +42,9 @@ class MedicalRecordController extends Controller
 
     public function download(Request $request, MedicalRecordAttachment $attachment): StreamedResponse
     {
-        $this->authorizeOwnership($request, $attachment->record);
-        abort_unless($attachment->isPrescription(), 403);
+        $this->authorize('download', $attachment);
         abort_unless(Storage::exists($attachment->path), 404);
 
         return Storage::download($attachment->path, $attachment->original_name);
-    }
-
-    private function authorizeOwnership(Request $request, MedicalRecord $record): void
-    {
-        abort_unless($record->patient_id === $request->user()->id, 403);
     }
 }

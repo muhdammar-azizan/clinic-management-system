@@ -29,7 +29,7 @@ class AppointmentController extends Controller
 
     public function cancel(Request $request, Appointment $appointment, AppointmentService $appointments): RedirectResponse
     {
-        abort_unless($appointment->patient_id === $request->user()->id, 403);
+        $this->authorize('cancel', $appointment);
 
         $error = $appointments->cancel($appointment, onlyBeforeStart: true);
 
