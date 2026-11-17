@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-guest-layout title="Register">
     <h1 class="text-xl font-semibold text-deep">Create a patient account</h1>
     <p class="mt-1 text-sm text-muted">Register to book appointments and view your records.</p>
 

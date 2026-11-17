@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-guest-layout title="Sign in">
     <h1 class="text-xl font-semibold text-deep">Sign in</h1>
     <p class="mt-1 text-sm text-muted">Welcome back. Enter your details to continue.</p>
 

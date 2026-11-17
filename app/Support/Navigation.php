@@ -21,6 +21,28 @@ class Navigation
     }
 
     /**
+     * Browser tab title for the current page: the label of the active menu item, or null if none matches.
+     */
+    public static function pageTitle(?User $user): ?string
+    {
+        if (request()->routeIs('profile.*')) {
+            return 'Profile';
+        }
+
+        if (! $user) {
+            return null;
+        }
+
+        foreach (static::for($user) as $item) {
+            if (request()->routeIs($item['active'])) {
+                return $item['label'];
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Up to two initials of the user's name, for the avatar.
      */
     public static function initials(User $user): string
