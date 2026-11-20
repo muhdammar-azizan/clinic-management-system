@@ -18,6 +18,14 @@ use Illuminate\View\View;
 
 class RosterSlotController extends Controller
 {
+    /** Sort choices for the list: key => label. The first one is the default. */
+    private const SORT_OPTIONS = [
+        'date_desc' => 'Date, newest first',
+        'date_asc' => 'Date, oldest first',
+        'latest' => 'Latest added',
+        'doctor_az' => 'Doctor A-Z',
+    ];
+
     public function index(Request $request): View
     {
         $filters = $request->validate([
@@ -27,7 +35,9 @@ class RosterSlotController extends Controller
             'status' => ['nullable', Rule::enum(SlotStatus::class)],
             'from' => ['nullable', 'date'],
             'to' => ['nullable', 'date', 'after_or_equal:from'],
+            'sort' => ['nullable', Rule::in(array_keys(self::SORT_OPTIONS))],
         ]);
+        $sort = $filters['sort'] ?? 'date_desc';
 
         $slots = RosterSlot::query()
             ->with('doctor.doctorProfile.service')
@@ -40,8 +50,7 @@ class RosterSlotController extends Controller
             ->when($filters['status'] ?? null, fn ($query, $status) => $query->where('status', $status))
             ->when($filters['from'] ?? null, fn ($query, $from) => $query->whereDate('slot_date', '>=', $from))
             ->when($filters['to'] ?? null, fn ($query, $to) => $query->whereDate('slot_date', '<=', $to))
-            ->orderByDesc('slot_date')
-            ->orderBy('start_time')
+            ->tap(fn ($query) => $this->applySort($query, $sort))
             ->paginate(15)
             ->withQueryString();
 
@@ -49,8 +58,23 @@ class RosterSlotController extends Controller
             'slots' => $slots,
             'doctors' => $this->doctors(),
             'services' => Service::orderBy('name')->get(),
-            'filtered' => collect($filters)->filter()->isNotEmpty(),
+            // Sorting alone does not count as a filter.
+            'filtered' => collect($filters)->except('sort')->filter()->isNotEmpty(),
+            'sortOptions' => self::SORT_OPTIONS,
+            'sort' => $sort,
         ]);
+    }
+
+    private function applySort(Builder $query, string $sort): void
+    {
+        match ($sort) {
+            'date_asc' => $query->orderBy('slot_date')->orderBy('start_time'),
+            'latest' => $query->orderByDesc('id'),
+            'doctor_az' => $query
+                ->orderBy(User::select('name')->whereColumn('users.id', 'roster_slots.doctor_id'))
+                ->orderBy('slot_date')->orderBy('start_time'),
+            default => $query->orderByDesc('slot_date')->orderBy('start_time'),
+        };
     }
 
     /**

@@ -15,10 +15,14 @@
         @endif
 
         <x-card>
-            <form method="GET" class="space-y-4">
+            {{-- Filters apply by themselves: typing waits 400 ms, dropdowns and dates apply at once. --}}
+            <form method="GET" class="space-y-4" x-data x-ref="filters"
+                  @input.debounce.400ms="if ($event.target.type === 'search') $refs.filters.requestSubmit()"
+                  @change="if ($event.target.type !== 'search') $refs.filters.requestSubmit()">
                 <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     <x-field label="Search" name="search" class="sm:col-span-2 lg:col-span-1">
-                        <x-text-input name="search" type="search" class="block w-full" placeholder="Slot ID, doctor or notes" :value="request('search')" />
+                        <x-text-input name="search" type="search" class="block w-full" placeholder="Slot ID, doctor or notes" :value="request('search')"
+                                      x-init="if ($el.value) { $el.focus(); $el.setSelectionRange($el.value.length, $el.value.length) }" />
                     </x-field>
 
                     <x-field label="Doctor" name="doctor">
@@ -35,6 +39,14 @@
                             <option value="">All services</option>
                             @foreach ($services as $service)
                                 <option value="{{ $service->id }}" @selected(request('service') == $service->id)>{{ $service->name }}</option>
+                            @endforeach
+                        </x-select>
+                    </x-field>
+
+                    <x-field label="Sort by" name="sort">
+                        <x-select name="sort" class="block w-full">
+                            @foreach ($sortOptions as $value => $label)
+                                <option value="{{ $value }}" @selected($sort === $value)>{{ $label }}</option>
                             @endforeach
                         </x-select>
                     </x-field>
@@ -58,7 +70,7 @@
                 </div>
 
                 <div class="flex gap-2">
-                    <x-button type="submit">Apply filters</x-button>
+                    <x-button type="submit">Apply</x-button>
                     @if ($filtered)
                         <x-button :href="route('admin.rosters.index')" variant="ghost">Clear</x-button>
                     @endif
