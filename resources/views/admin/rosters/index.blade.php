@@ -3,6 +3,7 @@
         <x-page-header title="Doctor Roster" subtitle="Create and manage appointment slots for each doctor.">
             <x-slot name="actions">
                 @include('admin.rosters._tabs')
+                <x-button :href="route('admin.rosters.generate')" variant="secondary">Generate Slots</x-button>
                 <x-button :href="route('admin.rosters.create')">Add Slot</x-button>
             </x-slot>
         </x-page-header>
@@ -98,7 +99,7 @@
                     <tr>
                         <td>{{ $slot->slot_code }}</td>
                         <td>{{ $slot->slot_date->format('d M Y') }}</td>
-                        <td>{{ $slot->start_time_label }}</td>
+                        <td>{{ $slot->time_range }}</td>
                         <td>
                             <div class="font-medium text-ink">{{ $slot->doctor->name }}</div>
                             <div class="text-xs text-muted">{{ $slot->doctor->doctorProfile?->service->name }}</div>

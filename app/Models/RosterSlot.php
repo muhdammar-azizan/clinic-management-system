@@ -16,7 +16,7 @@ class RosterSlot extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['doctor_id', 'slot_date', 'start_time', 'status', 'notes'];
+    protected $fillable = ['doctor_id', 'slot_date', 'start_time', 'end_time', 'status', 'notes'];
 
     protected $attributes = [
         'status' => 'available',
@@ -75,6 +75,24 @@ class RosterSlot extends Model
     public function startsAt(): Carbon
     {
         return $this->slot_date->copy()->setTimeFromTimeString((string) $this->start_time);
+    }
+
+    /**
+     * End time as "HH:MM", or null for old slots that have none.
+     */
+    protected function endTimeLabel(): Attribute
+    {
+        return Attribute::get(fn () => $this->end_time ? substr((string) $this->end_time, 0, 5) : null);
+    }
+
+    /**
+     * "09:00 - 09:30", or just the start time when there is no end time.
+     */
+    protected function timeRange(): Attribute
+    {
+        return Attribute::get(fn () => $this->end_time_label
+            ? $this->start_time_label.' - '.$this->end_time_label
+            : $this->start_time_label);
     }
 
     public function isAvailable(): bool

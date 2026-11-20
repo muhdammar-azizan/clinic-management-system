@@ -36,6 +36,7 @@ class RosterSlotTimeRuleTest extends TestCase
             'doctor_id' => $this->doctor->id,
             'slot_date' => today()->toDateString(),
             'start_time' => '16:00',
+            'end_time' => '16:30',
             'status' => 'available',
         ], $overrides);
     }
@@ -52,7 +53,7 @@ class RosterSlotTimeRuleTest extends TestCase
     public function test_tc006_a_time_that_has_already_passed_today_is_rejected(): void
     {
         $this->actingAs($this->admin)
-            ->post('/admin/rosters', $this->payload(['start_time' => '10:00']))
+            ->post('/admin/rosters', $this->payload(['start_time' => '10:00', 'end_time' => '10:30']))
             ->assertSessionHasErrors('start_time');
 
         $this->assertSame(0, RosterSlot::count());
@@ -61,14 +62,14 @@ class RosterSlotTimeRuleTest extends TestCase
     public function test_tc006_the_current_minute_is_also_rejected(): void
     {
         $this->actingAs($this->admin)
-            ->post('/admin/rosters', $this->payload(['start_time' => '15:00']))
+            ->post('/admin/rosters', $this->payload(['start_time' => '15:00', 'end_time' => '15:30']))
             ->assertSessionHasErrors('start_time');
     }
 
     public function test_tc007_today_with_a_later_time_is_accepted(): void
     {
         $this->actingAs($this->admin)
-            ->post('/admin/rosters', $this->payload(['start_time' => '15:30']))
+            ->post('/admin/rosters', $this->payload(['start_time' => '15:30', 'end_time' => '16:00']))
             ->assertSessionHasNoErrors();
 
         $this->assertSame(1, RosterSlot::count());
@@ -77,7 +78,7 @@ class RosterSlotTimeRuleTest extends TestCase
     public function test_an_early_time_on_a_future_date_is_accepted(): void
     {
         $this->actingAs($this->admin)
-            ->post('/admin/rosters', $this->payload(['slot_date' => today()->addDay()->toDateString(), 'start_time' => '08:00']))
+            ->post('/admin/rosters', $this->payload(['slot_date' => today()->addDay()->toDateString(), 'start_time' => '08:00', 'end_time' => '08:30']))
             ->assertSessionHasNoErrors();
     }
 
@@ -90,11 +91,11 @@ class RosterSlotTimeRuleTest extends TestCase
         ]);
 
         $this->actingAs($this->admin)
-            ->put("/admin/rosters/{$slot->id}", $this->payload(['start_time' => '10:00']))
+            ->put("/admin/rosters/{$slot->id}", $this->payload(['start_time' => '10:00', 'end_time' => '10:30']))
             ->assertSessionHasErrors('start_time');
 
         $this->actingAs($this->admin)
-            ->put("/admin/rosters/{$slot->id}", $this->payload(['slot_date' => today()->subDay()->toDateString(), 'start_time' => '09:00']))
+            ->put("/admin/rosters/{$slot->id}", $this->payload(['slot_date' => today()->subDay()->toDateString(), 'start_time' => '09:00', 'end_time' => '09:30']))
             ->assertSessionHasErrors('slot_date');
 
         $this->assertSame('09:00', $slot->fresh()->start_time_label);
@@ -109,7 +110,7 @@ class RosterSlotTimeRuleTest extends TestCase
         ]);
 
         $this->actingAs($this->admin)
-            ->put("/admin/rosters/{$slot->id}", $this->payload(['start_time' => '09:00', 'notes' => 'Fixed typo']))
+            ->put("/admin/rosters/{$slot->id}", $this->payload(['start_time' => '09:00', 'end_time' => '09:30', 'notes' => 'Fixed typo']))
             ->assertSessionHasNoErrors();
 
         $this->assertSame('Fixed typo', $slot->fresh()->notes);

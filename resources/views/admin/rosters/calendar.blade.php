@@ -8,6 +8,7 @@
         <x-page-header title="Doctor Roster" subtitle="Weekly view of appointment slots.">
             <x-slot name="actions">
                 @include('admin.rosters._tabs')
+                <x-button :href="route('admin.rosters.generate')" variant="secondary">Generate Slots</x-button>
                 <x-button :href="route('admin.rosters.create')">Add Slot</x-button>
             </x-slot>
         </x-page-header>
@@ -62,7 +63,7 @@
                                        'cursor-default' => $booked,
                                    ])
                                    title="{{ $slot->slot_code }}{{ $slot->notes ? ' - '.$slot->notes : '' }}">
-                                    <span class="font-semibold">{{ $slot->start_time_label }}</span>
+                                    <span class="font-semibold">{{ $slot->time_range }}</span>
                                     <span class="block truncate">{{ $slot->doctor->name }}</span>
                                     <span class="block text-[11px] opacity-80">{{ $slot->status->label() }}{{ $booked ? ' (booked)' : '' }}</span>
                                 </a>

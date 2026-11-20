@@ -18,6 +18,10 @@ class RosterSlotFactory extends Factory
             'doctor_id' => User::factory()->state(['role' => Role::Doctor]),
             'slot_date' => fake()->dateTimeBetween('+1 day', '+14 days')->format('Y-m-d'),
             'start_time' => fake()->randomElement(['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00']),
+            // A 30 minute session that follows whatever start time was chosen.
+            'end_time' => fn (array $attributes) => \Carbon\Carbon::createFromFormat('H:i', substr($attributes['start_time'], 0, 5))
+                ->addMinutes(30)
+                ->format('H:i'),
             'status' => SlotStatus::Available,
             'notes' => null,
         ];

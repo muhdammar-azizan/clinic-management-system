@@ -45,7 +45,7 @@
                                 'border-success/30 bg-success-soft text-success-dark' => $slot->isAvailable(),
                                 'border-primary/30 bg-primary-soft text-deep' => ! $slot->isAvailable(),
                             ]) title="{{ $slot->slot_code }}{{ $slot->notes ? ' - '.$slot->notes : '' }}">
-                                <span class="font-semibold">{{ $slot->start_time_label }}</span>
+                                <span class="font-semibold">{{ $slot->time_range }}</span>
                                 @if ($appointment)
                                     <span class="block truncate">{{ $appointment->patient->name }}</span>
                                     <span class="block truncate text-[11px] opacity-80">{{ $appointment->service->name }}</span>

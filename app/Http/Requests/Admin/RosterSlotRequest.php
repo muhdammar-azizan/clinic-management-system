@@ -54,6 +54,16 @@ class RosterSlotRequest extends FormRequest
                     ->where('slot_date', $this->input('slot_date'))
                     ->ignore($slot?->id),
             ],
+            'end_time' => [
+                'required',
+                'date_format:H:i',
+                'after:start_time',
+                function (string $attribute, mixed $value, \Closure $fail) use ($slot) {
+                    if ($this->overlapsAnotherSlot($slot, $value)) {
+                        $fail('This doctor already has a slot that overlaps with that time range.');
+                    }
+                },
+            ],
             'status' => ['required', Rule::enum(SlotStatus::class)],
             'notes' => ['nullable', 'string', 'max:500'],
         ];
@@ -69,11 +79,38 @@ class RosterSlotRequest extends FormRequest
             && $this->input('start_time') === $slot->start_time_label;
     }
 
+    /**
+     * Another slot of the same doctor on the same day covers part of start-end.
+     * An old slot without an end time counts as an instant at its start time.
+     */
+    private function overlapsAnotherSlot(?RosterSlot $slot, string $end): bool
+    {
+        $doctor = $this->input('doctor_id');
+        $date = $this->input('slot_date');
+        $start = $this->input('start_time');
+
+        // Missing or badly formatted input is reported by the other rules.
+        if (! $doctor || ! preg_match('/^\d{4}-\d{2}-\d{2}$/', (string) $date) || ! preg_match('/^\d{2}:\d{2}$/', (string) $start)) {
+            return false;
+        }
+
+        return RosterSlot::query()
+            ->where('doctor_id', $doctor)
+            ->where('slot_date', $date)
+            ->when($slot, fn ($query) => $query->whereKeyNot($slot->id))
+            ->where('start_time', '<', $end)
+            ->where(fn ($query) => $query
+                ->where('end_time', '>', $start)
+                ->orWhere(fn ($legacy) => $legacy->whereNull('end_time')->where('start_time', '>=', $start)))
+            ->exists();
+    }
+
     public function messages(): array
     {
         return [
             'start_time.unique' => 'This doctor already has a slot at that date and time.',
             'doctor_id.exists' => 'Please choose a valid doctor.',
+            'end_time.after' => 'The end time must be later than the start time.',
         ];
     }
 }

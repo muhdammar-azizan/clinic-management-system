@@ -34,6 +34,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('appointments', [Admin\AppointmentController::class, 'index'])->name('appointments.index');
     Route::get('records', [Admin\MedicalRecordController::class, 'index'])->name('records.index');
     Route::resource('doctors', Admin\DoctorController::class)->except('show');
+    Route::get('rosters/generate', [Admin\RosterGeneratorController::class, 'create'])->name('rosters.generate');
+    Route::post('rosters/generate', [Admin\RosterGeneratorController::class, 'store'])->name('rosters.generate.store');
     Route::get('rosters/calendar', [Admin\RosterSlotController::class, 'calendar'])->name('rosters.calendar');
     Route::resource('rosters', Admin\RosterSlotController::class)->except('show')->parameters(['rosters' => 'slot']);
     Route::resource('patients', Admin\PatientController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);

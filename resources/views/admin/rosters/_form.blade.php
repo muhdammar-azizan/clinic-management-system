@@ -34,6 +34,11 @@
                               :value="old('start_time', $slot->start_time_label)" required />
             </x-field>
 
+            <x-field label="End time" name="end_time" required>
+                <x-text-input id="end_time" name="end_time" type="time" class="block w-full"
+                              :value="old('end_time', $slot->end_time_label)" required />
+            </x-field>
+
             <x-field label="Status" name="status" required>
                 <x-select id="status" name="status" class="block w-full" required>
                     @foreach (\App\Enums\SlotStatus::cases() as $status)

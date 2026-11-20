@@ -29,6 +29,7 @@ class RosterSlotManagementTest extends TestCase
             'doctor_id' => $doctor->id,
             'slot_date' => now()->addDays(2)->toDateString(),
             'start_time' => '09:30',
+            'end_time' => '10:00',
             'status' => 'available',
             'notes' => 'Morning clinic',
         ], $overrides);
@@ -100,6 +101,7 @@ class RosterSlotManagementTest extends TestCase
         $this->actingAs($this->admin())->put("/admin/rosters/{$slot->id}", $this->payload($slot->doctor, [
             'slot_date' => $slot->slot_date->toDateString(),
             'start_time' => '10:00',
+            'end_time' => '10:30',
             'status' => 'occupied',
             'notes' => 'Doctor on call',
         ]))->assertSessionHasNoErrors()->assertRedirect('/admin/rosters');

@@ -44,7 +44,7 @@
                                         <input type="radio" name="roster_slot_id" value="{{ $slot->id }}" class="peer sr-only"
                                                @checked(old('roster_slot_id') == $slot->id) required>
                                         <span class="block rounded-card border border-line bg-white px-3 py-2 text-sm transition hover:border-primary peer-checked:border-primary peer-checked:bg-primary-soft peer-focus-visible:ring-2 peer-focus-visible:ring-primary">
-                                            <span class="block font-semibold text-deep">{{ $slot->start_time_label }}</span>
+                                            <span class="block font-semibold text-deep">{{ $slot->time_range }}</span>
                                             <span class="block truncate text-muted">{{ $slot->doctor->name }}</span>
                                         </span>
                                     </label>
