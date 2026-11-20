@@ -168,10 +168,10 @@ class MedicalRecordController extends Controller
                 [$record, $obsolete] = $persist();
 
                 foreach ($request->file('prescription_files', []) as $file) {
-                    $stored[] = $this->storeFile($record, $file, MedicalRecordAttachment::TYPE_PRESCRIPTION);
+                    $this->storeFile($record, $file, MedicalRecordAttachment::TYPE_PRESCRIPTION, $stored);
                 }
                 foreach ($request->file('attachments', []) as $file) {
-                    $stored[] = $this->storeFile($record, $file, MedicalRecordAttachment::TYPE_OTHER);
+                    $this->storeFile($record, $file, MedicalRecordAttachment::TYPE_OTHER, $stored);
                 }
 
                 return $obsolete;
@@ -206,11 +206,15 @@ class MedicalRecordController extends Controller
     }
 
     /**
-     * Save one upload on the private disk and register it. Returns the stored path.
+     * Save one upload on the private disk and register it. The path is added to $stored before the
+     * database is touched, so a failure afterwards still lets the caller delete the file.
+     *
+     * @param  list<string>  $stored
      */
-    private function storeFile(MedicalRecord $record, UploadedFile $file, string $type): string
+    private function storeFile(MedicalRecord $record, UploadedFile $file, string $type, array &$stored): void
     {
         $path = $file->store("medical-records/{$record->id}");
+        $stored[] = $path;
 
         $record->attachments()->create([
             'type' => $type,
@@ -219,7 +223,5 @@ class MedicalRecordController extends Controller
             'mime_type' => $file->getClientMimeType(),
             'size' => $file->getSize(),
         ]);
-
-        return $path;
     }
 }
