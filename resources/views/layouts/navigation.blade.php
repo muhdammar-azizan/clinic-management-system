@@ -43,6 +43,10 @@
                     </div>
 
                     <x-dropdown-link :href="route('profile.edit')">Profile</x-dropdown-link>
+                    <x-dropdown-link :href="route('feedback.create')">Give feedback</x-dropdown-link>
+                    @if ($user->isAdmin())
+                        <x-dropdown-link :href="route('admin.feedback.index')">Feedback list</x-dropdown-link>
+                    @endif
 
                     <form method="POST" action="{{ route('logout') }}" class="border-t border-line">
                         @csrf
@@ -85,6 +89,12 @@
             <div class="border-t border-line p-4">
                 <p class="truncate text-sm font-semibold">{{ $user->name }}</p>
                 <p class="truncate text-xs text-muted">{{ $user->email }}</p>
+                <div class="mt-3 space-y-1 text-sm">
+                    <a href="{{ route('feedback.create') }}" class="block py-1 font-medium">Give feedback</a>
+                    @if ($user->isAdmin())
+                        <a href="{{ route('admin.feedback.index') }}" class="block py-1 font-medium">Feedback list</a>
+                    @endif
+                </div>
                 <div class="mt-3 flex gap-2">
                     <a href="{{ route('profile.edit') }}" class="flex-1 rounded-md border border-line px-3 py-2 text-center text-sm font-medium text-ink hover:bg-canvas">Profile</a>
                     <form method="POST" action="{{ route('logout') }}" class="flex-1">

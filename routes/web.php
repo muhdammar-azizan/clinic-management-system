@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Doctor;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Patient;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Every role can send feedback. The limit stops one person from flooding the list.
+    Route::get('/feedback', [FeedbackController::class, 'create'])->name('feedback.create');
+    Route::post('/feedback', [FeedbackController::class, 'store'])->middleware('throttle:10,60')->name('feedback.store');
 });
 
 // Admin area
@@ -33,6 +38,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/dashboard', Admin\DashboardController::class)->name('dashboard');
     Route::get('appointments', [Admin\AppointmentController::class, 'index'])->name('appointments.index');
     Route::get('records', [Admin\MedicalRecordController::class, 'index'])->name('records.index');
+    Route::get('feedback', [Admin\FeedbackController::class, 'index'])->name('feedback.index');
     Route::resource('doctors', Admin\DoctorController::class)->except('show');
     Route::get('rosters/generate', [Admin\RosterGeneratorController::class, 'create'])->name('rosters.generate');
     Route::post('rosters/generate', [Admin\RosterGeneratorController::class, 'store'])->name('rosters.generate.store');

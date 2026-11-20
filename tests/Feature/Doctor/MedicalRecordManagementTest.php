@@ -75,8 +75,15 @@ class MedicalRecordManagementTest extends TestCase
 
     public function test_list_search_and_filters(): void
     {
-        $match = $this->record(['diagnosis' => 'Acute bronchitis', 'condition' => 'critical', 'visit_date' => '2026-12-10']);
-        $other = $this->record(['diagnosis' => 'Sprained ankle', 'condition' => 'stable', 'visit_date' => '2026-11-01']);
+        // Fixed names and emails: random ones can contain the digit searched for below.
+        $match = $this->record([
+            'patient_id' => User::factory()->create(['name' => 'Aisyah Rahman', 'email' => 'aisyah@example.test'])->id,
+            'diagnosis' => 'Acute bronchitis', 'condition' => 'critical', 'visit_date' => '2026-12-10',
+        ]);
+        $other = $this->record([
+            'patient_id' => User::factory()->create(['name' => 'Daniel Lim', 'email' => 'daniel@example.test'])->id,
+            'diagnosis' => 'Sprained ankle', 'condition' => 'stable', 'visit_date' => '2026-11-01',
+        ]);
 
         $get = fn (string $q) => $this->actingAs($this->doctor)->get('/doctor/records?'.$q);
 
