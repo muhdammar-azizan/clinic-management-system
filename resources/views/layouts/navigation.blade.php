@@ -5,7 +5,7 @@
 @endphp
 
 <header x-data="{ drawer: false }" class="bg-deep text-white">
-    <div class="mx-auto flex h-14 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
         <!-- Menu button (mobile) -->
         <button @click="drawer = true" type="button" class="-ms-2 rounded-md p-2 text-white/80 hover:bg-white/10 hover:text-white lg:hidden" aria-label="Open menu">
             <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
@@ -13,7 +13,7 @@
 
         <!-- Logo -->
         <a href="{{ route('dashboard') }}" class="flex shrink-0 items-center" aria-label="{{ config('app.name') }}">
-            <img src="{{ asset('images/logo/logo-full-white.png') }}" alt="{{ config('app.name') }}" class="hidden h-10 w-auto sm:block">
+            <img src="{{ asset('images/logo/logo-full-white.png') }}" alt="{{ config('app.name') }}" class="hidden h-12 w-auto sm:block">
             <img src="{{ asset('images/logo/icon-white.png') }}" alt="{{ config('app.name') }}" class="h-8 w-auto sm:hidden">
         </a>
 
