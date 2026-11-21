@@ -22,6 +22,8 @@ php artisan serve
 
 Demo accounts (password: `password`): `admin@clinic.test`, `doctor@clinic.test`, `patient@clinic.test`.
 
+The seeder also adds four more doctors (for example `aisha.rahman@clinic.test`), six more patients, a two-week roster, eight finished visits with medical records, and upcoming and cancelled appointments. The data is fixed, so it looks the same on every run. To start again with fresh demo data: `php artisan migrate:fresh --seed`.
+
 ## Run with Docker
 
 This runs the app the way it runs in production: Apache with several PHP workers, and MySQL.

@@ -46,5 +46,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'patient@clinic.test',
             'role' => Role::Patient,
         ]);
+
+        $this->call(DemoDataSeeder::class);
     }
 }
