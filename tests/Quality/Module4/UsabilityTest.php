@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\Group;
 use Tests\Quality\QualityTestCase;
 
 /**
- * Module 4 (Fatin's report), Usability. The report also times a first-time doctor (target 2 minutes).
+ * Module 4 (SQA report), Usability. The report also times a first-time doctor (target 2 minutes).
  * That part needs a person, so it is done by hand and recorded in QUALITY.md.
  */
 class UsabilityTest extends QualityTestCase

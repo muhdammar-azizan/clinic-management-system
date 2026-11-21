@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes\Group;
 use Tests\Quality\QualityTestCase;
 
 /**
- * Module 4 (Fatin's report), Reliability: foreign keys, confirmation before delete,
+ * Module 4 (SQA report), Reliability: foreign keys, confirmation before delete,
  * transactions, and zero accidental data loss.
  */
 class ReliabilityTest extends QualityTestCase

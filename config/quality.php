@@ -6,7 +6,7 @@
 |--------------------------------------------------------------------------
 |
 | Everything the Quality page needs to turn raw test results into the metrics
-| of the SQA reports (Module 3 by Ammar, Module 4 by Fatin). Results are
+| of the SQA reports (Module 3 and Module 4). Results are
 | written by "php artisan quality:report" and "php artisan quality:load-test"
 | into the quality folder and are committed, so the page works after deploy.
 |
@@ -48,7 +48,7 @@ return [
         'SRS-REQ-312' => 'Role-based access control',
     ],
 
-    // Module 4 checks from Fatin's report: group => [attribute, title].
+    // Module 4 checks from the Module 4 SQA report: group => [attribute, title].
     'checks' => [
         'M4-PERF-1' => ['Performance', 'Indexes exist and the query count does not grow with the data'],
         'M4-PERF-2' => ['Performance', 'Pages answer well within 2 seconds'],

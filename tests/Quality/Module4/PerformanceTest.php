@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\Group;
 use Tests\Quality\QualityTestCase;
 
 /**
- * Module 4 (Fatin's report), Performance.
+ * Module 4 (SQA report), Performance.
  *
  * These checks run inside PHPUnit, so they measure the application and the database, not a real web
  * server. The report's ApacheBench run (ab -n 100 -c 10) is repeated separately against a running server.

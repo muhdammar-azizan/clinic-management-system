@@ -21,3 +21,7 @@ php artisan serve
 ```
 
 Demo accounts (password: `password`): `admin@clinic.test`, `doctor@clinic.test`, `patient@clinic.test`.
+
+## Quality
+
+Quality is the focus of this project. See [QUALITY.md](QUALITY.md) for the quality model, test cases, metrics, load test results and the defects found. Run the quality tests with `php artisan test --testsuite=Quality`.
