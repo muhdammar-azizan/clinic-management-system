@@ -1,0 +1,1 @@
+O:23:"PHPStan\Cache\CacheItem":2:{s:11:"variableKey";s:74:"v2-30ff3668db34b8004592c3ca433f93b161d8318b3f79b08c56bbaf2b26f55c99-8.2.31";s:4:"data";a:3:{s:7:"classes";a:1:{s:55:"illuminate\foundation\http\middleware\validatecsrftoken";b:1;}s:9:"functions";a:0:{}s:9:"constants";a:0:{}}}

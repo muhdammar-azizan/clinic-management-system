@@ -3,13 +3,22 @@
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Doctor;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\Patient;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Health check for hosting platforms. It must not start a session, or every check would write one.
+Route::get('/health', HealthController::class)
+    ->withoutMiddleware([StartSession::class, ShareErrorsFromSession::class, ValidateCsrfToken::class])
+    ->name('health');
 
 // Design preview page, available in local development only.
 Route::get('/style-guide', function () {

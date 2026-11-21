@@ -25,8 +25,8 @@ class AppointmentController extends Controller
             ->with('patient', 'slot', 'service')
             ->when($filters['search'] ?? null, function ($query, $search) {
                 $query->whereHas('patient', fn ($q) => $q
-                    ->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%"));
+                    ->whereLike('name', "%{$search}%")
+                    ->orWhereLike('email', "%{$search}%"));
             })
             ->when($filters['status'] ?? null, fn ($query, $status) => $query->where('appointments.status', $status))
             ->orderedBySlot()

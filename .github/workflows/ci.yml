@@ -124,3 +124,58 @@ jobs:
             coverage.xml
             coverage.txt
           if-no-files-found: ignore
+
+  # The app runs on PostgreSQL when deployed, but the other job tests on SQLite.
+  # This job runs the same tests on PostgreSQL to find differences (search, dates, sorting).
+  tests-postgres:
+    name: Tests on PostgreSQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: clinic_test
+          POSTGRES_USER: clinic
+          POSTGRES_PASSWORD: clinic
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U clinic -d clinic_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: clinic_test
+      DB_USERNAME: clinic
+      DB_PASSWORD: clinic
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo_pgsql, fileinfo, mbstring
+          coverage: none
+
+      - run: composer install --no-interaction --no-progress --prefer-dist
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Prepare the application
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Run all tests on PostgreSQL
+        run: php artisan test

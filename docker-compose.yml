@@ -1,0 +1,54 @@
+# Runs the app the way it runs in production: Apache with several PHP workers and PostgreSQL.
+#
+#   1. Make a key:       php artisan key:generate --show
+#   2. Start:            APP_KEY=base64:... docker compose up --build
+#   3. Open:             http://localhost:8080  (demo accounts, password "password")
+#   4. Measure the load: php artisan quality:load-test --url=http://127.0.0.1:8080 --note="Docker, Apache with 16 workers, PostgreSQL"
+#
+# The demo accounts are added only on an empty database. Remove RUN_DEMO_SEED for real data.
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_KEY: ${APP_KEY:?Set APP_KEY first. Make one with php artisan key:generate --show}
+      APP_URL: http://localhost:8080
+      LOG_CHANNEL: stderr
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_DATABASE: clinic
+      DB_USERNAME: clinic
+      DB_PASSWORD: ${DB_PASSWORD:-local-only-password}
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+      RUN_DEMO_SEED: "1"
+    volumes:
+      # Medical record files must survive a restart.
+      - records:/var/www/html/storage/app/private
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: clinic
+      POSTGRES_USER: clinic
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-local-only-password}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U clinic -d clinic"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  records:
+  pgdata:

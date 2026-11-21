@@ -83,8 +83,8 @@ class RosterSlotController extends Controller
     private function applySearch(Builder $query, string $search): Builder
     {
         return $query->where(function (Builder $q) use ($search) {
-            $q->where('notes', 'like', "%{$search}%")
-                ->orWhereHas('doctor', fn ($d) => $d->where('name', 'like', "%{$search}%"));
+            $q->whereLike('notes', "%{$search}%")
+                ->orWhereHas('doctor', fn ($d) => $d->whereLike('name', "%{$search}%"));
 
             if (preg_match('/^(?:slt-?)?0*(\d+)$/i', $search, $match)) {
                 $q->orWhere('id', (int) $match[1]);

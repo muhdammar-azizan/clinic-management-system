@@ -32,8 +32,8 @@ class MedicalRecordController extends Controller
                 $search = trim($search);
 
                 $query->where(function ($q) use ($search) {
-                    $q->whereHas('patient', fn ($p) => $p->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%"))
-                        ->orWhereHas('doctor', fn ($d) => $d->where('name', 'like', "%{$search}%"));
+                    $q->whereHas('patient', fn ($p) => $p->whereLike('name', "%{$search}%")->orWhereLike('email', "%{$search}%"))
+                        ->orWhereHas('doctor', fn ($d) => $d->whereLike('name', "%{$search}%"));
 
                     // Accept "MR-00012", "mr12" or just "12".
                     if (preg_match('/^(?:mr-?)?0*(\d+)$/i', $search, $match)) {

@@ -22,7 +22,7 @@ class DoctorController extends Controller
             ->where('role', Role::Doctor)
             ->with('doctorProfile.service')
             ->when($request->string('search')->trim()->toString(), function ($query, $search) {
-                $query->where(fn ($q) => $q->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%"));
+                $query->where(fn ($q) => $q->whereLike('name', "%{$search}%")->orWhereLike('email', "%{$search}%"));
             })
             ->when($request->integer('service'), function ($query, $serviceId) {
                 $query->whereHas('doctorProfile', fn ($q) => $q->where('service_id', $serviceId));

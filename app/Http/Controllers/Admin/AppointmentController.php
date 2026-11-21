@@ -34,7 +34,7 @@ class AppointmentController extends Controller
                 $search = trim($search);
 
                 $query->where(function ($q) use ($search) {
-                    $q->whereHas('patient', fn ($p) => $p->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%"));
+                    $q->whereHas('patient', fn ($p) => $p->whereLike('name', "%{$search}%")->orWhereLike('email', "%{$search}%"));
 
                     // Accept "APT-00012", "apt12" or just "12".
                     if (preg_match('/^(?:apt-?)?0*(\d+)$/i', $search, $match)) {

@@ -25,8 +25,8 @@ class FeedbackController extends Controller
                 $search = trim($search);
 
                 $q->where(fn ($w) => $w
-                    ->where('comment', 'like', "%{$search}%")
-                    ->orWhereHas('user', fn ($u) => $u->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%")));
+                    ->whereLike('comment', "%{$search}%")
+                    ->orWhereHas('user', fn ($u) => $u->whereLike('name', "%{$search}%")->orWhereLike('email', "%{$search}%")));
             })
             ->when($filters['rating'] ?? null, fn ($q, $rating) => $q->where('rating', $rating))
             ->when($filters['area'] ?? null, fn ($q, $area) => $q->where('area', $area));

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,5 +23,9 @@ class AppServiceProvider extends ServiceProvider
     {
         // Pagination links styled with the design tokens.
         Paginator::defaultView('vendor.pagination.clinic');
+
+        if (config('app.force_https')) {
+            URL::forceScheme('https');
+        }
     }
 }

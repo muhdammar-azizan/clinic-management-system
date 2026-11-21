@@ -25,7 +25,16 @@ class AppointmentOverviewTest extends TestCase
     {
         $slot = RosterSlot::factory()->occupied()->create($slot);
 
-        return Appointment::factory()->create(array_merge(['roster_slot_id' => $slot->id], $attributes));
+        // Fixed names and emails: random fake data can contain the digits or text being searched for.
+        static $number = 0;
+        $number++;
+        $patient = User::factory()->create([
+            'role' => Role::Patient,
+            'name' => 'Patient Number'.str_repeat('X', $number),
+            'email' => 'patient-'.str_repeat('x', $number).'@clinic.test',
+        ]);
+
+        return Appointment::factory()->create(array_merge(['roster_slot_id' => $slot->id, 'patient_id' => $patient->id], $attributes));
     }
 
     private function search(string $query)

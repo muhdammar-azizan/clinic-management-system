@@ -19,9 +19,9 @@ class PatientController extends Controller
             ->withCount('appointments')
             ->when($request->string('search')->trim()->toString(), function ($query, $search) {
                 $query->where(fn ($q) => $q
-                    ->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('phone', 'like', "%{$search}%"));
+                    ->whereLike('name', "%{$search}%")
+                    ->orWhereLike('email', "%{$search}%")
+                    ->orWhereLike('phone', "%{$search}%"));
             })
             ->orderBy('name')
             ->paginate(10)

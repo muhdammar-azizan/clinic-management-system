@@ -15,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => EnsureUserHasRole::class,
         ]);
+
+        // Hosting platforms put a proxy in front of the app. Trusting it lets Laravel see the real
+        // scheme and address of the visitor. Set TRUSTED_PROXIES to a list of addresses to narrow it.
+        $middleware->trustProxies(at: env('TRUSTED_PROXIES', '*'));
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

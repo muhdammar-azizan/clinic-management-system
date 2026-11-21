@@ -185,7 +185,8 @@ Writing the quality tests found real problems. They are recorded here the way th
 | 8 | The report command ran tests with development settings | Values from `.env` override `phpunit.xml` | The command passes the `phpunit.xml` settings explicitly | `quality:report` |
 | 9 | Two tests failed now and then | Random fake data sometimes contained the text being searched for | Use fixed names and emails | The two tests that were fixed |
 | 10 | Dashboard views would fail on a Linux server | View names used capital letters (`Admin.dashboard`) but folders are lower case | Lower-case view names | Dashboard tests |
-| 11 | **Open.** Pages are slow under 10 users at once | See the load test and the limits above | To be measured again on a server with several workers | Load test |
+| 11 | The health page crashed with an error 500 | The health route skips the session, but the CSRF middleware still reads it to set a cookie | Skip the CSRF middleware on that route too | `DeployReadinessTest` |
+| 12 | **Open.** Pages are slow under 10 users at once | See the load test and the limits above | To be measured again on a server with several workers | Load test |
 
 ## Checks done by a person
 
@@ -209,6 +210,13 @@ Two checks in the original reports need a human, so they are timed by hand and r
 | Person | Tasks finished without help | Rating |
 | --- | --- | --- |
 | | | |
+
+## Deployment checks
+
+- `GET /health` answers 200 or 503 and lists the database and storage checks. It does not start a session and never shows error text (`DeployReadinessTest`).
+- The container refuses to start without `APP_KEY`, runs migrations, and adds demo accounts only on an empty database.
+- CI runs the whole test suite twice: on SQLite and on PostgreSQL (`tests-postgres`). The deployed app uses PostgreSQL, so this finds differences in search, dates and sorting.
+- **Not verified yet:** the Docker image build and the `tests-postgres` job. Docker is not installed on the development machine, so both are checked for the first time by `docker compose up --build` and the first CI run.
 
 ## Not done yet
 

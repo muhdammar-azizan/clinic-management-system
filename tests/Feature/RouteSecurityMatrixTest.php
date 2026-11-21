@@ -108,7 +108,7 @@ class RouteSecurityMatrixTest extends TestCase
 
     public function test_every_unprefixed_route_is_intentionally_public_or_auth_only(): void
     {
-        $allowed = ['/', 'style-guide', 'dashboard', 'profile', 'feedback', 'login', 'register', 'forgot-password', 'reset-password/{token}', 'reset-password',
+        $allowed = ['/', 'style-guide', 'dashboard', 'profile', 'feedback', 'health', 'login', 'register', 'forgot-password', 'reset-password/{token}', 'reset-password',
             'verify-email', 'verify-email/{id}/{hash}', 'email/verification-notification', 'confirm-password', 'password', 'logout', 'up', 'storage/{path}'];
 
         foreach (RouteFacade::getRoutes() as $route) {
