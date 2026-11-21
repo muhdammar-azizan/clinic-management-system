@@ -46,6 +46,7 @@
                     <x-dropdown-link :href="route('feedback.create')">Give feedback</x-dropdown-link>
                     @if ($user->isAdmin())
                         <x-dropdown-link :href="route('admin.feedback.index')">Feedback list</x-dropdown-link>
+                        <x-dropdown-link :href="route('admin.quality.index')">Quality report</x-dropdown-link>
                     @endif
 
                     <form method="POST" action="{{ route('logout') }}" class="border-t border-line">
@@ -93,6 +94,7 @@
                     <a href="{{ route('feedback.create') }}" class="block py-1 font-medium">Give feedback</a>
                     @if ($user->isAdmin())
                         <a href="{{ route('admin.feedback.index') }}" class="block py-1 font-medium">Feedback list</a>
+                        <a href="{{ route('admin.quality.index') }}" class="block py-1 font-medium">Quality report</a>
                     @endif
                 </div>
                 <div class="mt-3 flex gap-2">

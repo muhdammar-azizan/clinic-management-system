@@ -1,0 +1,79 @@
+{
+    "generated_at": "2026-11-21T04:53:07+00:00",
+    "tool": "ApacheBench (ab -n 100 -c 10)",
+    "base_url": "http://127.0.0.1:8001",
+    "server": "Single-process PHP built-in server, OPcache on and Laravel optimize (cached config, routes and views), Windows laptop, SQLite",
+    "data": {
+        "users": 33,
+        "appointments": 30,
+        "roster_slots": 180,
+        "medical_records": 200
+    },
+    "scenarios": [
+        {
+            "label": "Doctor: medical record list",
+            "path": "/doctor/records",
+            "requests": 100,
+            "concurrency": 10,
+            "failed": 0,
+            "non_2xx": 0,
+            "mean_ms": 2580.5,
+            "requests_per_second": 3.88,
+            "p50_ms": 2485,
+            "p95_ms": 2845,
+            "max_ms": 3416
+        },
+        {
+            "label": "Doctor: weekly schedule",
+            "path": "/doctor/schedule",
+            "requests": 100,
+            "concurrency": 10,
+            "failed": 0,
+            "non_2xx": 0,
+            "mean_ms": 1584.7,
+            "requests_per_second": 6.31,
+            "p50_ms": 1432,
+            "p95_ms": 2468,
+            "max_ms": 2686
+        },
+        {
+            "label": "Patient: medical record list",
+            "path": "/patient/records",
+            "requests": 100,
+            "concurrency": 10,
+            "failed": 0,
+            "non_2xx": 0,
+            "mean_ms": 1643.1,
+            "requests_per_second": 6.09,
+            "p50_ms": 1630,
+            "p95_ms": 1744,
+            "max_ms": 1770
+        },
+        {
+            "label": "Admin: roster list",
+            "path": "/admin/rosters",
+            "requests": 100,
+            "concurrency": 10,
+            "failed": 0,
+            "non_2xx": 0,
+            "mean_ms": 3200.2,
+            "requests_per_second": 3.12,
+            "p50_ms": 2993,
+            "p95_ms": 4273,
+            "max_ms": 4721
+        },
+        {
+            "label": "Admin: appointments",
+            "path": "/admin/appointments",
+            "requests": 100,
+            "concurrency": 10,
+            "failed": 0,
+            "non_2xx": 0,
+            "mean_ms": 2494.9,
+            "requests_per_second": 4.01,
+            "p50_ms": 2481,
+            "p95_ms": 2640,
+            "max_ms": 2671
+        }
+    ]
+}

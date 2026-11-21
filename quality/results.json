@@ -1,0 +1,497 @@
+{
+    "generated_at": "2026-11-21T04:40:16+00:00",
+    "environment": {
+        "php": "8.2.31",
+        "laravel": "12.72.0",
+        "database": "SQLite in memory (tests)",
+        "commit": "8962e81"
+    },
+    "tests": [
+        {
+            "class": "Tests\\Quality\\Module3\\AccuracyTest",
+            "name": "test_tc005_a_slot_with_a_past_date_is_not_saved_and_the_message_matches_the_report",
+            "title": "A slot with a past date is not saved and the message matches the report",
+            "module": 3,
+            "attribute": "Accuracy",
+            "status": "passed",
+            "time": 1.441,
+            "groups": [
+                "TC-005",
+                "SRS-REQ-309",
+                "SRS-REQ-310"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\AccuracyTest",
+            "name": "test_tc006_a_start_time_that_has_passed_today_is_not_saved",
+            "title": "A start time that has passed today is not saved",
+            "module": 3,
+            "attribute": "Accuracy",
+            "status": "passed",
+            "time": 0.213,
+            "groups": [
+                "TC-006",
+                "SRS-REQ-309",
+                "SRS-REQ-310"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\AccuracyTest",
+            "name": "test_tc007_today_with_a_future_start_time_is_saved_and_shown_correctly",
+            "title": "Today with a future start time is saved and shown correctly",
+            "module": 3,
+            "attribute": "Accuracy",
+            "status": "passed",
+            "time": 0.617,
+            "groups": [
+                "TC-007",
+                "SRS-REQ-309",
+                "SRS-REQ-310"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\AccuracyTest",
+            "name": "test_patients_are_never_offered_a_slot_that_has_already_started",
+            "title": "Patients are never offered a slot that has already started",
+            "module": 3,
+            "attribute": "Accuracy",
+            "status": "passed",
+            "time": 0.365,
+            "groups": [
+                "TC-005",
+                "TC-007",
+                "SRS-REQ-309"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\DataIntegrityTest",
+            "name": "test_tc008_a_duplicate_slot_is_refused_by_the_application_and_by_the_database",
+            "title": "A duplicate slot is refused by the application and by the database",
+            "module": 3,
+            "attribute": "Data Integrity",
+            "status": "passed",
+            "time": 0.26,
+            "groups": [
+                "TC-008",
+                "SRS-REQ-307"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\DataIntegrityTest",
+            "name": "test_tc008_overlapping_ranges_of_one_doctor_are_refused",
+            "title": "Overlapping ranges of one doctor are refused",
+            "module": 3,
+            "attribute": "Data Integrity",
+            "status": "passed",
+            "time": 0.254,
+            "groups": [
+                "TC-008",
+                "SRS-REQ-307"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\DataIntegrityTest",
+            "name": "test_tc009_delete_asks_for_confirmation_and_removes_the_slot_only_after_it",
+            "title": "Delete asks for confirmation and removes the slot only after it",
+            "module": 3,
+            "attribute": "Data Integrity",
+            "status": "passed",
+            "time": 0.462,
+            "groups": [
+                "TC-009",
+                "SRS-REQ-305"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\DataIntegrityTest",
+            "name": "test_tc009_a_slot_with_a_booked_appointment_cannot_be_deleted",
+            "title": "A slot with a booked appointment cannot be deleted",
+            "module": 3,
+            "attribute": "Data Integrity",
+            "status": "passed",
+            "time": 0.194,
+            "groups": [
+                "TC-009",
+                "SRS-REQ-305"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\DataIntegrityTest",
+            "name": "test_tc010_the_same_doctor_and_date_with_a_different_time_is_allowed",
+            "title": "The same doctor and date with a different time is allowed",
+            "module": 3,
+            "attribute": "Data Integrity",
+            "status": "passed",
+            "time": 0.235,
+            "groups": [
+                "TC-010",
+                "SRS-REQ-307"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\SecurityTest",
+            "name": "test_tc011_doctors_and_patients_are_blocked_from_every_roster_management_request",
+            "title": "Doctors and patients are blocked from every roster management request",
+            "module": 3,
+            "attribute": "Security",
+            "status": "passed",
+            "time": 0.504,
+            "groups": [
+                "TC-011",
+                "SRS-REQ-311",
+                "SRS-REQ-312"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\SecurityTest",
+            "name": "test_tc011_visitors_who_are_not_signed_in_are_sent_to_the_login_page",
+            "title": "Visitors who are not signed in are sent to the login page",
+            "module": 3,
+            "attribute": "Security",
+            "status": "passed",
+            "time": 0.265,
+            "groups": [
+                "TC-011",
+                "SRS-REQ-312"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\SecurityTest",
+            "name": "test_tc011_the_roster_menu_is_shown_to_admins_only",
+            "title": "The roster menu is shown to admins only",
+            "module": 3,
+            "attribute": "Security",
+            "status": "passed",
+            "time": 0.407,
+            "groups": [
+                "TC-011",
+                "SRS-REQ-311"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\SecurityTest",
+            "name": "test_tc012_admin_reaches_every_management_page_and_can_create_edit_and_delete",
+            "title": "Admin reaches every management page and can create edit and delete",
+            "module": 3,
+            "attribute": "Security",
+            "status": "passed",
+            "time": 0.922,
+            "groups": [
+                "TC-012",
+                "SRS-REQ-311",
+                "SRS-REQ-312"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\SecurityTest",
+            "name": "test_tc013_a_doctor_sees_only_their_own_schedule_and_no_management_controls",
+            "title": "A doctor sees only their own schedule and no management controls",
+            "module": 3,
+            "attribute": "Security",
+            "status": "passed",
+            "time": 0.258,
+            "groups": [
+                "TC-013",
+                "SRS-REQ-311",
+                "SRS-REQ-312"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\SecurityTest",
+            "name": "test_tc013_the_doctors_read_only_view_cannot_be_used_to_change_data",
+            "title": "The doctors read only view cannot be used to change data",
+            "module": 3,
+            "attribute": "Security",
+            "status": "passed",
+            "time": 0.189,
+            "groups": [
+                "TC-013",
+                "SRS-REQ-311"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\UsabilityTest",
+            "name": "test_tc001_admin_creates_a_slot_and_sees_it_in_the_list_with_a_success_message",
+            "title": "Admin creates a slot and sees it in the list with a success message",
+            "module": 3,
+            "attribute": "Usability",
+            "status": "passed",
+            "time": 0.368,
+            "groups": [
+                "TC-001",
+                "SRS-REQ-301",
+                "SRS-REQ-302"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\UsabilityTest",
+            "name": "test_tc002_list_view_and_calendar_view_show_the_same_slots",
+            "title": "List view and calendar view show the same slots",
+            "module": 3,
+            "attribute": "Usability",
+            "status": "passed",
+            "time": 0.363,
+            "groups": [
+                "TC-002",
+                "SRS-REQ-302",
+                "SRS-REQ-303",
+                "SRS-REQ-306"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\UsabilityTest",
+            "name": "test_tc003_admin_edits_a_slot_and_only_that_slot_changes",
+            "title": "Admin edits a slot and only that slot changes",
+            "module": 3,
+            "attribute": "Usability",
+            "status": "passed",
+            "time": 0.399,
+            "groups": [
+                "TC-003",
+                "SRS-REQ-304"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module3\\UsabilityTest",
+            "name": "test_tc004_admin_searches_by_doctor_name_and_sorts_the_list",
+            "title": "Admin searches by doctor name and sorts the list",
+            "module": 3,
+            "attribute": "Usability",
+            "status": "passed",
+            "time": 0.826,
+            "groups": [
+                "TC-004",
+                "SRS-REQ-308"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\PerformanceTest",
+            "name": "test_the_columns_the_record_pages_filter_and_sort_by_are_indexed",
+            "title": "The columns the record pages filter and sort by are indexed",
+            "module": 4,
+            "attribute": "Performance",
+            "status": "passed",
+            "time": 0.135,
+            "groups": [
+                "M4-PERF-1"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\PerformanceTest",
+            "name": "test_the_number_of_queries_does_not_grow_with_the_number_of_records",
+            "title": "The number of queries does not grow with the number of records",
+            "module": 4,
+            "attribute": "Performance",
+            "status": "passed",
+            "time": 1.079,
+            "groups": [
+                "M4-PERF-1"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\PerformanceTest",
+            "name": "test_the_patient_history_page_does_not_add_queries_per_record",
+            "title": "The patient history page does not add queries per record",
+            "module": 4,
+            "attribute": "Performance",
+            "status": "passed",
+            "time": 0.791,
+            "groups": [
+                "M4-PERF-1"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\PerformanceTest",
+            "name": "test_a_doctor_opens_a_busy_record_list_well_within_two_seconds",
+            "title": "A doctor opens a busy record list well within two seconds",
+            "module": 4,
+            "attribute": "Performance",
+            "status": "passed",
+            "time": 7.019,
+            "groups": [
+                "M4-PERF-2"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\PerformanceTest",
+            "name": "test_opening_one_record_with_a_search_stays_fast_with_many_records",
+            "title": "Opening one record with a search stays fast with many records",
+            "module": 4,
+            "attribute": "Performance",
+            "status": "passed",
+            "time": 1.706,
+            "groups": [
+                "M4-PERF-2"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\ReliabilityTest",
+            "name": "test_a_record_for_a_patient_that_does_not_exist_is_refused_by_the_database",
+            "title": "A record for a patient that does not exist is refused by the database",
+            "module": 4,
+            "attribute": "Reliability",
+            "status": "passed",
+            "time": 0.169,
+            "groups": [
+                "M4-REL-1"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\ReliabilityTest",
+            "name": "test_a_record_for_a_doctor_that_does_not_exist_is_refused_by_the_database",
+            "title": "A record for a doctor that does not exist is refused by the database",
+            "module": 4,
+            "attribute": "Reliability",
+            "status": "passed",
+            "time": 0.153,
+            "groups": [
+                "M4-REL-1"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\ReliabilityTest",
+            "name": "test_every_delete_button_goes_through_the_confirmation_dialog",
+            "title": "Every delete button goes through the confirmation dialog",
+            "module": 4,
+            "attribute": "Reliability",
+            "status": "passed",
+            "time": 0.267,
+            "groups": [
+                "M4-REL-2"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\ReliabilityTest",
+            "name": "test_a_delete_cannot_be_triggered_by_simply_opening_a_link",
+            "title": "A delete cannot be triggered by simply opening a link",
+            "module": 4,
+            "attribute": "Reliability",
+            "status": "passed",
+            "time": 2.403,
+            "groups": [
+                "M4-REL-2"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\ReliabilityTest",
+            "name": "test_one_hundred_deletes_lose_no_data_and_every_record_can_be_restored",
+            "title": "One hundred deletes lose no data and every record can be restored",
+            "module": 4,
+            "attribute": "Reliability",
+            "status": "passed",
+            "time": 3.955,
+            "groups": [
+                "M4-REL-2",
+                "M4-REL-4"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\ReliabilityTest",
+            "name": "test_another_doctor_cannot_delete_a_record",
+            "title": "Another doctor cannot delete a record",
+            "module": 4,
+            "attribute": "Reliability",
+            "status": "passed",
+            "time": 0.293,
+            "groups": [
+                "M4-REL-2"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\ReliabilityTest",
+            "name": "test_a_failure_while_saving_leaves_no_record_and_no_orphan_file",
+            "title": "A failure while saving leaves no record and no orphan file",
+            "module": 4,
+            "attribute": "Reliability",
+            "status": "passed",
+            "time": 3.405,
+            "groups": [
+                "M4-REL-3"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\ReliabilityTest",
+            "name": "test_one_hundred_repeated_reads_all_succeed",
+            "title": "One hundred repeated reads all succeed",
+            "module": 4,
+            "attribute": "Reliability",
+            "status": "passed",
+            "time": 22.064,
+            "groups": [
+                "M4-REL-4"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\UsabilityTest",
+            "name": "test_every_form_field_has_a_clear_label_and_required_ones_are_marked",
+            "title": "Every form field has a clear label and required ones are marked",
+            "module": 4,
+            "attribute": "Usability",
+            "status": "passed",
+            "time": 0.298,
+            "groups": [
+                "M4-USE-1"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\UsabilityTest",
+            "name": "test_the_three_steps_are_shown_and_the_form_is_prefilled_from_the_appointment",
+            "title": "The three steps are shown and the form is prefilled from the appointment",
+            "module": 4,
+            "attribute": "Usability",
+            "status": "passed",
+            "time": 0.307,
+            "groups": [
+                "M4-USE-1"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\UsabilityTest",
+            "name": "test_a_missing_required_field_gets_a_specific_message_and_nothing_typed_is_lost",
+            "title": "A missing required field gets a specific message and nothing typed is lost",
+            "module": 4,
+            "attribute": "Usability",
+            "status": "passed",
+            "time": 0.348,
+            "groups": [
+                "M4-USE-2"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\UsabilityTest",
+            "name": "test_saving_shows_a_clear_success_message",
+            "title": "Saving shows a clear success message",
+            "module": 4,
+            "attribute": "Usability",
+            "status": "passed",
+            "time": 0.348,
+            "groups": [
+                "M4-USE-3"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\UsabilityTest",
+            "name": "test_the_patient_sees_the_saved_record_on_their_own_page",
+            "title": "The patient sees the saved record on their own page",
+            "module": 4,
+            "attribute": "Usability",
+            "status": "passed",
+            "time": 0.298,
+            "groups": [
+                "M4-USE-3"
+            ]
+        },
+        {
+            "class": "Tests\\Quality\\Module4\\UsabilityTest",
+            "name": "test_data_accurate_rate_is_one_hundred_percent_for_twenty_records",
+            "title": "Data accurate rate is one hundred percent for twenty records",
+            "module": 4,
+            "attribute": "Usability",
+            "status": "passed",
+            "time": 2.065,
+            "groups": [
+                "M4-USE-4"
+            ]
+        }
+    ]
+}
