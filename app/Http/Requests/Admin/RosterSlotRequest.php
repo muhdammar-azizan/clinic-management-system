@@ -49,10 +49,23 @@ class RosterSlotRequest extends FormRequest
                         $fail('That start time has already passed today. Please choose a later time.');
                     }
                 },
-                Rule::unique('roster_slots')
-                    ->where('doctor_id', $this->input('doctor_id'))
-                    ->where('slot_date', $this->input('slot_date'))
-                    ->ignore($slot?->id),
+                // Skipped for an impossible date, which the slot_date rule already reports.
+                function (string $attribute, mixed $value, \Closure $fail) use ($slot) {
+                    if (! $this->isRealDate($this->input('slot_date'))) {
+                        return;
+                    }
+
+                    $taken = RosterSlot::query()
+                        ->where('doctor_id', $this->input('doctor_id'))
+                        ->where('slot_date', $this->input('slot_date'))
+                        ->where('start_time', $value)
+                        ->when($slot, fn ($query) => $query->whereKeyNot($slot->id))
+                        ->exists();
+
+                    if ($taken) {
+                        $fail('This doctor already has a slot at that date and time.');
+                    }
+                },
             ],
             'end_time' => [
                 'required',
@@ -80,6 +93,21 @@ class RosterSlotRequest extends FormRequest
     }
 
     /**
+     * True for a date that exists, such as 2026-02-28. A date like 2026-13-45 has the right
+     * shape but MySQL refuses it with an error, so it must never reach a query.
+     */
+    private function isRealDate(mixed $date): bool
+    {
+        if (! is_string($date)) {
+            return false;
+        }
+
+        $parsed = \DateTime::createFromFormat('!Y-m-d', $date);
+
+        return $parsed !== false && $parsed->format('Y-m-d') === $date;
+    }
+
+    /**
      * Another slot of the same doctor on the same day covers part of start-end.
      * An old slot without an end time counts as an instant at its start time.
      */
@@ -90,7 +118,7 @@ class RosterSlotRequest extends FormRequest
         $start = $this->input('start_time');
 
         // Missing or badly formatted input is reported by the other rules.
-        if (! $doctor || ! preg_match('/^\d{4}-\d{2}-\d{2}$/', (string) $date) || ! preg_match('/^\d{2}:\d{2}$/', (string) $start)) {
+        if (! $doctor || ! $this->isRealDate($date) || ! preg_match('/^\d{2}:\d{2}$/', (string) $start)) {
             return false;
         }
 
@@ -108,7 +136,6 @@ class RosterSlotRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'start_time.unique' => 'This doctor already has a slot at that date and time.',
             'doctor_id.exists' => 'Please choose a valid doctor.',
             'end_time.after' => 'The end time must be later than the start time.',
         ];

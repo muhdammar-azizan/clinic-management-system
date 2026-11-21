@@ -186,7 +186,8 @@ Writing the quality tests found real problems. They are recorded here the way th
 | 9 | Two tests failed now and then | Random fake data sometimes contained the text being searched for | Use fixed names and emails | The two tests that were fixed |
 | 10 | Dashboard views would fail on a Linux server | View names used capital letters (`Admin.dashboard`) but folders are lower case | Lower-case view names | Dashboard tests |
 | 11 | The health page crashed with an error 500 | The health route skips the session, but the CSRF middleware still reads it to set a cookie | Skip the CSRF middleware on that route too | `DeployReadinessTest` |
-| 12 | **Open.** Pages are slow under 10 users at once | See the load test and the limits above | To be measured again on a server with several workers | Load test |
+| 12 | An impossible date such as `2026-13-45` caused an error 500 on MySQL | The roster checks only tested the shape of the date, so the value reached the database. SQLite accepted it, MySQL refused it. Found by the `tests-mysql` CI job | A date must exist before any roster rule queries the database | `RosterSlotTimeRuleTest` on MySQL |
+| 13 | **Open.** Pages are slow under 10 users at once | See the load test and the limits above | To be measured again on a server with several workers | Load test |
 
 ## Checks done by a person
 
