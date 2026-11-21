@@ -85,7 +85,11 @@ class MarkdownRenderer
             $m['attribute'], $m['name'], $m['target'], $m['value'] ?? '-', $this->label($m['status']),
         ])->all();
 
-        return "### Metrics, {$title}\n\n".$this->table(['Attribute', 'Metric', 'Target', 'Result', 'Status'], $rows);
+        $note = $module === 3
+            ? "\n\n_User Feedback Score is read live from the running system (see the Quality report page), so it is not part of this file._"
+            : '';
+
+        return "### Metrics, {$title}\n\n".$this->table(['Attribute', 'Metric', 'Target', 'Result', 'Status'], $rows).$note;
     }
 
     /**

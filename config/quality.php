@@ -15,6 +15,9 @@
 return [
     'path' => base_path('quality'),
 
+    // Where ApacheBench is installed, when it is not in the usual XAMPP folder or on the PATH.
+    'ab_path' => env('AB_PATH'),
+
     // Module 3 test cases from the report: id => [attribute, title].
     'test_cases' => [
         'TC-001' => ['Usability', 'Admin creates a new schedule slot'],

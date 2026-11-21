@@ -6,6 +6,7 @@ use App\Enums\AppointmentStatus;
 use App\Enums\Role;
 use App\Enums\SlotStatus;
 use App\Models\Appointment;
+use App\Models\MedicalRecord;
 use App\Models\RosterSlot;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -164,7 +165,7 @@ class AppointmentManagementTest extends TestCase
     public function test_deleting_keeps_the_medical_record(): void
     {
         $appointment = $this->appointment();
-        $record = \App\Models\MedicalRecord::factory()->create([
+        $record = MedicalRecord::factory()->create([
             'patient_id' => $appointment->patient_id,
             'doctor_id' => $this->doctor->id,
             'appointment_id' => $appointment->id,

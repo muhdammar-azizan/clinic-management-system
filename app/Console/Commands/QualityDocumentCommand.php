@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Feedback;
 use App\Services\QualityReport;
 use App\Support\Quality\MarkdownRenderer;
 use Illuminate\Console\Command;
@@ -24,8 +23,9 @@ class QualityDocumentCommand extends Command
             return self::FAILURE;
         }
 
-        $average = Feedback::count() > 0 ? round((float) Feedback::avg('rating'), 2) : null;
-        $generated = $renderer->render($quality->build($quality->results(), $quality->loadTest(), $average));
+        // The feedback score is left out on purpose. It is read live from one database, so it would
+        // differ between machines and make the --check result depend on where it runs.
+        $generated = $renderer->render($quality->build($quality->results(), $quality->loadTest(), null));
 
         try {
             $updated = $renderer->replaceBlock((string) file_get_contents($path), $generated);

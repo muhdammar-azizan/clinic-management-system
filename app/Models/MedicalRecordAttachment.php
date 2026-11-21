@@ -20,6 +20,9 @@ class MedicalRecordAttachment extends Model
         'type' => self::TYPE_OTHER,
     ];
 
+    /**
+     * @return BelongsTo<MedicalRecord, $this>
+     */
     public function record(): BelongsTo
     {
         return $this->belongsTo(MedicalRecord::class, 'medical_record_id');

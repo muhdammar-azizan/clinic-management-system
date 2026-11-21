@@ -12,6 +12,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property Carbon $slot_date
+ * @property SlotStatus $status
+ * @property-read string $start_time_label
+ * @property-read string|null $end_time_label
+ * @property-read string $time_range
+ * @property-read string $slot_code
+ */
 class RosterSlot extends Model
 {
     use HasFactory;
@@ -30,6 +38,9 @@ class RosterSlot extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function doctor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'doctor_id');
@@ -51,6 +62,9 @@ class RosterSlot extends Model
         return Attribute::get(fn () => substr((string) $this->start_time, 0, 5));
     }
 
+    /**
+     * @return HasMany<Appointment, $this>
+     */
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
@@ -58,6 +72,8 @@ class RosterSlot extends Model
 
     /**
      * The one booked appointment that currently holds this slot, if any.
+     *
+     * @return HasOne<Appointment, $this>
      */
     public function activeAppointment(): HasOne
     {
@@ -100,6 +116,10 @@ class RosterSlot extends Model
         return $this->status === SlotStatus::Available;
     }
 
+    /**
+     * @param  Builder<RosterSlot>  $query
+     * @return Builder<RosterSlot>
+     */
     public function scopeAvailable(Builder $query): Builder
     {
         return $query->where('status', SlotStatus::Available);
@@ -107,6 +127,9 @@ class RosterSlot extends Model
 
     /**
      * Slots a patient can still book: available, no active booking, and not already in the past.
+     *
+     * @param  Builder<RosterSlot>  $query
+     * @return Builder<RosterSlot>
      */
     public function scopeBookable(Builder $query): Builder
     {
@@ -120,6 +143,10 @@ class RosterSlot extends Model
             });
     }
 
+    /**
+     * @param  Builder<RosterSlot>  $query
+     * @return Builder<RosterSlot>
+     */
     public function scopeUpcoming(Builder $query): Builder
     {
         return $query->whereDate('slot_date', '>=', today());

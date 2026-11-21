@@ -138,6 +138,7 @@ class QualityReport
                 'feedback' => $feedbackScore,
                 'load_mean_ms' => $load ? max(array_column($load['scenarios'], 'mean_ms')) : null,
                 'load_failed' => $load ? array_sum(array_map(fn ($s) => $s['failed'] + $s['non_2xx'], $load['scenarios'])) : null,
+                default => null,
             };
 
             $rows[] = [

@@ -4,11 +4,12 @@ namespace Database\Factories;
 
 use App\Enums\ConditionStatus;
 use App\Enums\Role;
+use App\Models\MedicalRecord;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MedicalRecord>
+ * @extends Factory<MedicalRecord>
  */
 class MedicalRecordFactory extends Factory
 {

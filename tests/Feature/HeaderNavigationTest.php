@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 class HeaderNavigationTest extends TestCase
@@ -44,7 +45,7 @@ class HeaderNavigationTest extends TestCase
     {
         foreach (config('navigation') as $role => $items) {
             foreach ($items as $item) {
-                $this->assertTrue(\Illuminate\Support\Facades\Route::has($item['route']), "Missing route {$item['route']} for {$role}");
+                $this->assertTrue(Route::has($item['route']), "Missing route {$item['route']} for {$role}");
             }
         }
     }

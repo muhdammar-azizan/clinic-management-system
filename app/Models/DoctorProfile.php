@@ -12,11 +12,17 @@ class DoctorProfile extends Model
 
     protected $fillable = ['user_id', 'service_id', 'license_number', 'bio'];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<Service, $this>
+     */
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);

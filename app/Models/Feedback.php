@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property FeedbackRating $rating
+ */
 class Feedback extends Model
 {
     use HasFactory;
@@ -30,6 +33,9 @@ class Feedback extends Model
         return ['rating' => FeedbackRating::class];
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

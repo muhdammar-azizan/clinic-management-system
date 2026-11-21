@@ -21,7 +21,7 @@ abstract class QualityTestCase extends TestCase
         return User::factory()->create(['role' => Role::Admin]);
     }
 
-    protected function doctor(string $name = null): User
+    protected function doctor(?string $name = null): User
     {
         return User::factory()->create(array_filter(['role' => Role::Doctor, 'name' => $name]));
     }

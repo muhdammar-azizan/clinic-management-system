@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ConditionStatus;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +11,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property Carbon $visit_date
+ * @property Carbon|null $follow_up_date
+ * @property ConditionStatus $condition
+ * @property-read string $record_code
+ */
 class MedicalRecord extends Model
 {
     use HasFactory, SoftDeletes;
@@ -41,21 +48,33 @@ class MedicalRecord extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function patient(): BelongsTo
     {
         return $this->belongsTo(User::class, 'patient_id');
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function doctor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'doctor_id');
     }
 
+    /**
+     * @return BelongsTo<Appointment, $this>
+     */
     public function appointment(): BelongsTo
     {
         return $this->belongsTo(Appointment::class);
     }
 
+    /**
+     * @return HasMany<MedicalRecordAttachment, $this>
+     */
     public function attachments(): HasMany
     {
         return $this->hasMany(MedicalRecordAttachment::class);

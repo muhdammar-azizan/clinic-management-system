@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\Feedback;
 use App\Services\QualityReport;
 use App\Support\Quality\MarkdownRenderer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
 class QualityDocumentTest extends TestCase
@@ -125,7 +127,7 @@ class QualityDocumentTest extends TestCase
         $document = file_get_contents(base_path('QUALITY.md'));
 
         preg_match_all('/php artisan ([a-z:\-]+)/', $document, $matches);
-        $commands = array_keys(\Illuminate\Support\Facades\Artisan::all());
+        $commands = array_keys(Artisan::all());
 
         foreach (array_unique($matches[1]) as $name) {
             $this->assertContains($name, $commands, "QUALITY.md mentions an unknown command: {$name}");
@@ -139,5 +141,13 @@ class QualityDocumentTest extends TestCase
         foreach (['Fatin', 'Faiq', 'Ameera', 'Ammar', 'Roslina'] as $name) {
             $this->assertStringNotContainsString($name, $document);
         }
+    }
+
+    public function test_the_committed_document_matches_the_saved_results_whatever_is_in_the_database(): void
+    {
+        // The same check runs in CI. Feedback in the local database must not change the answer.
+        Feedback::factory()->count(3)->create();
+
+        $this->artisan('quality:document', ['--check' => true])->assertSuccessful();
     }
 }

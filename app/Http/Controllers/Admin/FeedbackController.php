@@ -59,6 +59,6 @@ class FeedbackController extends Controller
             ->selectRaw('area, count(*) as total, avg(rating) as average')
             ->groupBy('area')
             ->get()
-            ->mapWithKeys(fn ($row) => [$row->area => ['count' => (int) $row->total, 'average' => round((float) $row->average, 2)]]);
+            ->mapWithKeys(fn ($row) => [$row->area => ['count' => (int) $row->getAttribute('total'), 'average' => round((float) $row->getAttribute('average'), 2)]]);
     }
 }

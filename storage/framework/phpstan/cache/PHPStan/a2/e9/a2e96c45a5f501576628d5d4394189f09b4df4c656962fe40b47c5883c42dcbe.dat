@@ -1,0 +1,1 @@
+O:23:"PHPStan\Cache\CacheItem":2:{s:11:"variableKey";s:74:"v2-82a07fee8b04223bf3587e5d3458de77275335104efa304aaf9e4a2dad1dea8c-8.2.31";s:4:"data";a:3:{s:7:"classes";a:1:{s:53:"app\http\controllers\auth\passwordresetlinkcontroller";b:1;}s:9:"functions";a:0:{}s:9:"constants";a:0:{}}}

@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use App\Enums\Role;
 use App\Services\RosterGenerator;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -33,7 +34,7 @@ class GenerateRosterRequest extends FormRequest
                     $from = $this->input('from');
 
                     if (is_string($from) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $from)
-                        && \Carbon\Carbon::parse($from)->diffInDays(\Carbon\Carbon::parse($value)) >= RosterGenerator::MAX_DAYS) {
+                        && Carbon::parse($from)->diffInDays(Carbon::parse($value)) >= RosterGenerator::MAX_DAYS) {
                         $fail('Choose a range of '.RosterGenerator::MAX_DAYS.' days or fewer.');
                     }
                 },

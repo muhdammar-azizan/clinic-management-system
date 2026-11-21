@@ -26,7 +26,7 @@ class UsabilityTest extends QualityTestCase
 
     private int $slotCounter = 0;
 
-    private function appointment(string $reason = null): Appointment
+    private function appointment(?string $reason = null): Appointment
     {
         // Each appointment needs its own start time, because one doctor cannot have two slots at once.
         $n = $this->slotCounter++;

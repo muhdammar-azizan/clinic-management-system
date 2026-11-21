@@ -49,6 +49,8 @@ Beyond the attributes above, three rules apply to the whole system and are teste
 
 The admin can read the same results on the **Quality report** page (account menu, admin only).
 
+**Continuous integration** (`.github/workflows/ci.yml`) runs on every push and pull request: code style (Pint), static analysis (Larastan, level 5), the whole test suite with coverage, a check that this document matches the saved results, and dependency audits for PHP and JavaScript packages.
+
 Tools: PHPUnit 11 with Laravel's test tools, SQLite in memory for tests, ApacheBench for load, and the in-app portal feedback for user ratings.
 
 ## Results
@@ -79,6 +81,8 @@ _This block is written by `php artisan quality:document` from `quality/results.j
 | Data Integrity | Data Consistency Rate | = 100% | 100% | Met |
 | Security | Unauthorized Access Prevention Rate | > 95% | 100% | Met |
 | Security | Permission Error Rate | < 5% | 0% | Met |
+
+_User Feedback Score is read live from the running system (see the Quality report page), so it is not part of this file._
 
 ### Metrics, Module 4: Medical Records
 
@@ -213,4 +217,4 @@ Two checks in the original reports need a human, so they are timed by hand and r
 - Accessibility and performance audit with Lighthouse.
 - Automated security scan (for example OWASP ZAP).
 - A log of unauthorized access attempts, which the original security plan lists.
-- Running these checks in continuous integration. `php artisan quality:document --check` is ready for it.
+- Branch protection that makes the CI checks required before a merge (a repository setting, not code).

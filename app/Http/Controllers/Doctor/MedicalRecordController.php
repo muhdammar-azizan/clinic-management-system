@@ -209,11 +209,17 @@ class MedicalRecordController extends Controller
      * Save one upload on the private disk and register it. The path is added to $stored before the
      * database is touched, so a failure afterwards still lets the caller delete the file.
      *
-     * @param  list<string>  $stored
+     * @param  array<int, string>  $stored
      */
     private function storeFile(MedicalRecord $record, UploadedFile $file, string $type, array &$stored): void
     {
         $path = $file->store("medical-records/{$record->id}");
+
+        // store() gives false when the disk cannot be written. Stop here so the whole save is rolled back.
+        if ($path === false) {
+            throw new \RuntimeException('The uploaded file could not be stored.');
+        }
+
         $stored[] = $path;
 
         $record->attachments()->create([

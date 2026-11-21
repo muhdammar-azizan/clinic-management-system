@@ -5,13 +5,14 @@ namespace Database\Factories;
 use App\Enums\AppointmentStatus;
 use App\Enums\Role;
 use App\Enums\SlotStatus;
+use App\Models\Appointment;
 use App\Models\RosterSlot;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Appointment>
+ * @extends Factory<Appointment>
  */
 class AppointmentFactory extends Factory
 {

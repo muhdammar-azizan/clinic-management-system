@@ -1,0 +1,1 @@
+O:23:"PHPStan\Cache\CacheItem":2:{s:11:"variableKey";s:74:"v2-6b5b4b75fc25c43c1b31106f63f7b1f854b729527b2f5c067f122f4857f85e3a-8.2.31";s:4:"data";a:3:{s:7:"classes";a:1:{s:59:"app\http\controllers\auth\emailverificationpromptcontroller";b:1;}s:9:"functions";a:0:{}s:9:"constants";a:0:{}}}

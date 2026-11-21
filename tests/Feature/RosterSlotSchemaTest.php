@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Enums\SlotStatus;
 use App\Models\RosterSlot;
-use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

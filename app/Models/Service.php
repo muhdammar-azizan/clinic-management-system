@@ -17,6 +17,9 @@ class Service extends Model
         return ['is_active' => 'boolean'];
     }
 
+    /**
+     * @return HasMany<DoctorProfile, $this>
+     */
     public function doctorProfiles(): HasMany
     {
         return $this->hasMany(DoctorProfile::class);

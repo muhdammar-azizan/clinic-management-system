@@ -4,15 +4,21 @@ namespace App\Models;
 
 use App\Enums\Role;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @property Role $role
+ * @property Carbon|null $date_of_birth
+ */
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -39,21 +45,33 @@ class User extends Authenticatable
         'role' => 'patient',
     ];
 
+    /**
+     * @return HasOne<DoctorProfile, $this>
+     */
     public function doctorProfile(): HasOne
     {
         return $this->hasOne(DoctorProfile::class);
     }
 
+    /**
+     * @return HasMany<RosterSlot, $this>
+     */
     public function rosterSlots(): HasMany
     {
         return $this->hasMany(RosterSlot::class, 'doctor_id');
     }
 
+    /**
+     * @return HasMany<Feedback, $this>
+     */
     public function feedback(): HasMany
     {
         return $this->hasMany(Feedback::class);
     }
 
+    /**
+     * @return HasMany<Appointment, $this>
+     */
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class, 'patient_id');
@@ -61,6 +79,8 @@ class User extends Authenticatable
 
     /**
      * Records written about this user as a patient.
+     *
+     * @return HasMany<MedicalRecord, $this>
      */
     public function medicalRecords(): HasMany
     {
@@ -69,6 +89,8 @@ class User extends Authenticatable
 
     /**
      * Records written by this user as a doctor.
+     *
+     * @return HasMany<MedicalRecord, $this>
      */
     public function writtenRecords(): HasMany
     {

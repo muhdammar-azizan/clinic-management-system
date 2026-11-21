@@ -10,6 +10,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property AppointmentStatus $status
+ * @property-read User|null $doctor
+ * @property-read string $appointment_code
+ */
 class Appointment extends Model
 {
     use HasFactory;
@@ -35,16 +40,25 @@ class Appointment extends Model
         });
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function patient(): BelongsTo
     {
         return $this->belongsTo(User::class, 'patient_id');
     }
 
+    /**
+     * @return BelongsTo<RosterSlot, $this>
+     */
     public function slot(): BelongsTo
     {
         return $this->belongsTo(RosterSlot::class, 'roster_slot_id');
     }
 
+    /**
+     * @return BelongsTo<Service, $this>
+     */
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
@@ -71,6 +85,9 @@ class Appointment extends Model
         return $this->status === AppointmentStatus::Booked;
     }
 
+    /**
+     * @return HasOne<MedicalRecord, $this>
+     */
     public function medicalRecord(): HasOne
     {
         return $this->hasOne(MedicalRecord::class);
@@ -98,6 +115,9 @@ class Appointment extends Model
 
     /**
      * Sort by the slot's date and time. Joins roster_slots, so qualify column names when filtering.
+     *
+     * @param  Builder<Appointment>  $query
+     * @return Builder<Appointment>
      */
     public function scopeOrderedBySlot(Builder $query, string $direction = 'desc'): Builder
     {
@@ -109,6 +129,9 @@ class Appointment extends Model
 
     /**
      * Booked appointments whose slot has not started yet.
+     *
+     * @param  Builder<Appointment>  $query
+     * @return Builder<Appointment>
      */
     public function scopeUpcoming(Builder $query): Builder
     {
@@ -121,6 +144,9 @@ class Appointment extends Model
 
     /**
      * Appointments on the given day that are still active (booked or completed).
+     *
+     * @param  Builder<Appointment>  $query
+     * @return Builder<Appointment>
      */
     public function scopeOnDay(Builder $query, $date): Builder
     {
@@ -130,6 +156,9 @@ class Appointment extends Model
 
     /**
      * Visits that have happened but have no medical record yet. Matches canHaveMedicalRecord().
+     *
+     * @param  Builder<Appointment>  $query
+     * @return Builder<Appointment>
      */
     public function scopeAwaitingRecord(Builder $query): Builder
     {
@@ -145,6 +174,10 @@ class Appointment extends Model
             });
     }
 
+    /**
+     * @param  Builder<Appointment>  $query
+     * @return Builder<Appointment>
+     */
     public function scopeBooked(Builder $query): Builder
     {
         return $query->where('status', AppointmentStatus::Booked);

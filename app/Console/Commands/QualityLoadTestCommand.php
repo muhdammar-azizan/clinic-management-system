@@ -49,11 +49,13 @@ class QualityLoadTestCommand extends Command
 
             if ($cookies[$scenario['email']] === null) {
                 $this->warn('  Could not sign in. Is the server running and the demo data seeded?');
+
                 continue;
             }
 
             if (! $this->canOpen($base.$scenario['path'], $cookies[$scenario['email']])) {
                 $this->warn('  The page did not answer 200 for this account. Skipped.');
+
                 continue;
             }
 
@@ -61,6 +63,7 @@ class QualityLoadTestCommand extends Command
 
             if ($result === null) {
                 $this->warn('  ApacheBench failed.');
+
                 continue;
             }
 
@@ -99,7 +102,7 @@ class QualityLoadTestCommand extends Command
     {
         $candidates = array_filter([
             $this->option('ab'),
-            env('AB_PATH'),
+            config('quality.ab_path'),
             'C:\\xampp\\apache\\bin\\ab.exe',
         ]);
 

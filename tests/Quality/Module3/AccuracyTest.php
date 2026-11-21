@@ -2,6 +2,7 @@
 
 namespace Tests\Quality\Module3;
 
+use App\Models\DoctorProfile;
 use App\Models\RosterSlot;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
@@ -70,7 +71,7 @@ class AccuracyTest extends QualityTestCase
     #[Group('TC-005'), Group('TC-007'), Group('SRS-REQ-309')]
     public function test_patients_are_never_offered_a_slot_that_has_already_started(): void
     {
-        $profile = \App\Models\DoctorProfile::factory()->create(['user_id' => $this->doctor->id]);
+        $profile = DoctorProfile::factory()->create(['user_id' => $this->doctor->id]);
         $past = RosterSlot::factory()->create(['doctor_id' => $this->doctor->id, 'slot_date' => today()->toDateString(), 'start_time' => '10:00']);
         $later = RosterSlot::factory()->create(['doctor_id' => $this->doctor->id, 'slot_date' => today()->toDateString(), 'start_time' => '16:00']);
 

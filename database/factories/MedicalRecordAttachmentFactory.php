@@ -3,10 +3,11 @@
 namespace Database\Factories;
 
 use App\Models\MedicalRecord;
+use App\Models\MedicalRecordAttachment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MedicalRecordAttachment>
+ * @extends Factory<MedicalRecordAttachment>
  */
 class MedicalRecordAttachmentFactory extends Factory
 {

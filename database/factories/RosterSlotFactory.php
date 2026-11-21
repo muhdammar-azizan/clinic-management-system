@@ -4,11 +4,13 @@ namespace Database\Factories;
 
 use App\Enums\Role;
 use App\Enums\SlotStatus;
+use App\Models\RosterSlot;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\RosterSlot>
+ * @extends Factory<RosterSlot>
  */
 class RosterSlotFactory extends Factory
 {
@@ -19,7 +21,7 @@ class RosterSlotFactory extends Factory
             'slot_date' => fake()->dateTimeBetween('+1 day', '+14 days')->format('Y-m-d'),
             'start_time' => fake()->randomElement(['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00']),
             // A 30 minute session that follows whatever start time was chosen.
-            'end_time' => fn (array $attributes) => \Carbon\Carbon::createFromFormat('H:i', substr($attributes['start_time'], 0, 5))
+            'end_time' => fn (array $attributes) => Carbon::createFromFormat('H:i', substr($attributes['start_time'], 0, 5))
                 ->addMinutes(30)
                 ->format('H:i'),
             'status' => SlotStatus::Available,

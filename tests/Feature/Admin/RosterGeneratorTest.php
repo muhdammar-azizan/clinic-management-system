@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Enums\Role;
+use App\Models\DoctorProfile;
 use App\Models\RosterSlot;
 use App\Models\User;
 use App\Services\RosterGenerator;
@@ -203,7 +204,7 @@ class RosterGeneratorTest extends TestCase
 
     public function test_generated_slots_can_be_booked_by_patients(): void
     {
-        \App\Models\DoctorProfile::factory()->create(['user_id' => $this->doctor->id]);
+        DoctorProfile::factory()->create(['user_id' => $this->doctor->id]);
 
         $this->actingAs($this->admin)->post('/admin/rosters/generate', $this->payload(['from' => today()->addDay()->toDateString()]));
 
