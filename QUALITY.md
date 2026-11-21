@@ -215,8 +215,8 @@ Two checks in the original reports need a human, so they are timed by hand and r
 
 - `GET /health` answers 200 or 503 and lists the database and storage checks. It does not start a session and never shows error text (`DeployReadinessTest`).
 - The container refuses to start without `APP_KEY`, runs migrations, and adds demo accounts only on an empty database.
-- CI runs the whole test suite twice: on SQLite and on PostgreSQL (`tests-postgres`). The deployed app uses PostgreSQL, so this finds differences in search, dates and sorting.
-- **Not verified yet:** the Docker image build and the `tests-postgres` job. Docker is not installed on the development machine, so both are checked for the first time by `docker compose up --build` and the first CI run.
+- CI runs the whole test suite twice: on SQLite and on MySQL (`tests-mysql`). The deployed app uses MySQL, so this finds differences in search, dates and sorting.
+- **Not verified yet:** the Docker image build and the `tests-mysql` job. Docker is not installed on the development machine, so both are checked for the first time by `docker compose up --build` and the first CI run.
 
 ## Not done yet
 

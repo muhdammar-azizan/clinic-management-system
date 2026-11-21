@@ -22,7 +22,7 @@ FROM php:8.2-apache AS app
 COPY --from=ghcr.io/mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-RUN install-php-extensions pdo_pgsql pdo_mysql opcache \
+RUN install-php-extensions pdo_mysql opcache \
     && a2enmod rewrite headers \
     && rm -rf /var/lib/apt/lists/*
 

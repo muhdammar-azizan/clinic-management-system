@@ -1,9 +1,9 @@
-# Runs the app the way it runs in production: Apache with several PHP workers and PostgreSQL.
+# Runs the app the way it runs in production: Apache with several PHP workers and MySQL, the same database as the hosting.
 #
 #   1. Make a key:       php artisan key:generate --show
 #   2. Start:            APP_KEY=base64:... docker compose up --build
 #   3. Open:             http://localhost:8080  (demo accounts, password "password")
-#   4. Measure the load: php artisan quality:load-test --url=http://127.0.0.1:8080 --note="Docker, Apache with 16 workers, PostgreSQL"
+#   4. Measure the load: php artisan quality:load-test --url=http://127.0.0.1:8080 --note="Docker, Apache with 16 workers, MySQL"
 #
 # The demo accounts are added only on an empty database. Remove RUN_DEMO_SEED for real data.
 
@@ -18,9 +18,9 @@ services:
       APP_KEY: ${APP_KEY:?Set APP_KEY first. Make one with php artisan key:generate --show}
       APP_URL: http://localhost:8080
       LOG_CHANNEL: stderr
-      DB_CONNECTION: pgsql
+      DB_CONNECTION: mysql
       DB_HOST: db
-      DB_PORT: "5432"
+      DB_PORT: "3306"
       DB_DATABASE: clinic
       DB_USERNAME: clinic
       DB_PASSWORD: ${DB_PASSWORD:-local-only-password}
@@ -36,19 +36,20 @@ services:
         condition: service_healthy
 
   db:
-    image: postgres:16-alpine
+    image: mysql:8.0
     environment:
-      POSTGRES_DB: clinic
-      POSTGRES_USER: clinic
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-local-only-password}
+      MYSQL_DATABASE: clinic
+      MYSQL_USER: clinic
+      MYSQL_PASSWORD: ${DB_PASSWORD:-local-only-password}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-local-only-password}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - dbdata:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U clinic -d clinic"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD"]
       interval: 5s
       timeout: 5s
       retries: 10
 
 volumes:
   records:
-  pgdata:
+  dbdata:
