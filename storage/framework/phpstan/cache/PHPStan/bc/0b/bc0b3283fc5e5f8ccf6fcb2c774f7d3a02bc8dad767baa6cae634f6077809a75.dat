@@ -1,1 +1,1 @@
-O:23:"PHPStan\Cache\CacheItem":2:{s:11:"variableKey";s:74:"v2-5445414da350ba2d492940199d1abf4246d2aa4ab4432e66e5c5e7a63f34eb30-8.2.31";s:4:"data";a:3:{s:7:"classes";a:1:{s:27:"guzzlehttp\cookie\setcookie";b:1;}s:9:"functions";a:0:{}s:9:"constants";a:0:{}}}
+O:23:"PHPStan\Cache\CacheItem":2:{s:11:"variableKey";s:74:"v2-5445414da350ba2d492940199d1abf4246d2aa4ab4432e66e5c5e7a63f34eb30-8.5.13";s:4:"data";a:3:{s:7:"classes";a:1:{s:27:"guzzlehttp\cookie\setcookie";b:1;}s:9:"functions";a:0:{}s:9:"constants";a:0:{}}}
